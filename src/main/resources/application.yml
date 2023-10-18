@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 8080
 
 spring:
   application:
@@ -8,10 +8,10 @@ spring:
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://
+    url: jdbc:postgresql://172.30.1.9:5432/api_repository
     platform: postgres
-    username: 
-    password: 
+    username: lshh
+    password: lshh.com
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: false
@@ -22,3 +22,11 @@ spring:
       hibernate:
         format_sql: true
 
+# Swagger
+management:
+  endpoint:
+    web:
+      exposure:
+        include: "*"
+        exclude: "env,beans"
+        

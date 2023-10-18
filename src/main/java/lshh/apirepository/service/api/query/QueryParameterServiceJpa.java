@@ -1,12 +1,12 @@
-package lshh.apirepository.service.api.resource;
+package lshh.apirepository.service.api.query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.QueryParameterDto;
-import lshh.apirepository.orm.api.resource.QueryParameter;
-import lshh.apirepository.orm.api.resource.QueryParameterRepository;
+import lshh.apirepository.orm.api.query.QueryParameter;
+import lshh.apirepository.orm.api.query.QueryParameterRepository;
 
 @Service
 public class QueryParameterServiceJpa implements QueryParameterService{

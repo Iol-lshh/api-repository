@@ -1,4 +1,4 @@
-package lshh.apirepository.service.api.resource;
+package lshh.apirepository.service.api.resourcer;
 
 import java.util.List;
 import java.util.Optional;

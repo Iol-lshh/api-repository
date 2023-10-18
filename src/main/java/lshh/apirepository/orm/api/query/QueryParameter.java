@@ -1,29 +1,28 @@
-package lshh.apirepository.orm.api.resource;
-
-import java.util.Collection;
+package lshh.apirepository.orm.api.query;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lshh.apirepository.orm.RegistedInfo;
 
 @Accessors(chain = true, fluent = true)
-@Getter
 @Setter
+@Getter
 @Entity
-public class ResourcerInfo extends RegistedInfo{
+public class QueryParameter extends RegistedInfo {
     @Id
     int id;
 
     String name;
-    String path;
     String description;
+    String type;
+    String isOptional;
 
-    String key;
-
-    @OneToMany
-    Collection<Query> queries;
+    @ManyToOne
+    @JoinColumn(name="query_id")
+    Query query;
 }

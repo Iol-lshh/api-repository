@@ -1,4 +1,4 @@
-package lshh.apirepository.service.api;
+package lshh.apirepository.service.api.request;
 
 import org.springframework.stereotype.Service;
 

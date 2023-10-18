@@ -11,7 +11,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import lshh.apirepository.dto.api.ResourcerDto;
-import lshh.apirepository.service.api.resource.ResourcerService;
+import lshh.apirepository.service.api.resourcer.ResourcerService;
 
 public class JdbcResourcerManager implements ResourcerManager {
     
@@ -76,16 +76,19 @@ public class JdbcResourcerManager implements ResourcerManager {
     }
 
     private DataSource createDataSource(ResourcerDto dto) {
+        
         HikariConfig config = new HikariConfig();
-        // config.setJdbcUrl("jdbc:mysql://localhost:3306/mydb");
-        config.setJdbcUrl(dto.path());
+        config.setJdbcUrl("jdbc:"+dto.driver()+":"+dto.path());
         config.setUsername(dto.name());
         config.setPassword(dto.key());
-        // todo 드라이버를 작성해야할 듯. path도?
-        config.setDriverClassName("org.postgresql.Driver");
+        config.setDriverClassName(dto.driverDetail());
+        // ex)
+        // config.setJdbcUrl("jdbc:postgresql://172.30.1.9:5432/api_repository");
+        // config.setUsername("lshh");
+        // config.setPassword("lshh")
+        // config.setDriverClassName("org.postgresql.Driver");
         
-        HikariDataSource dataSource = new HikariDataSource(config);
-        return (DataSource) dataSource;
+        return new HikariDataSource(config);
     }
 
     // # 제거하기

@@ -13,4 +13,7 @@ public class ResourcerDto {
     String description;
 
     String key;
+
+    String driver;
+    String driverDetail;
 }

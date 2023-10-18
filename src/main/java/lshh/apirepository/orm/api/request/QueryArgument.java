@@ -1,4 +1,4 @@
-package lshh.apirepository.orm.request;
+package lshh.apirepository.orm.api.request;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

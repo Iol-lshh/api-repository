@@ -1,4 +1,4 @@
-package lshh.apirepository.orm.api.resource;
+package lshh.apirepository.orm.api.query;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

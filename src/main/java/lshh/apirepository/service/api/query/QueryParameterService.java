@@ -1,4 +1,4 @@
-package lshh.apirepository.service.api.resource;
+package lshh.apirepository.service.api.query;
 
 import lshh.apirepository.dto.api.QueryParameterDto;
 import lshh.apirepository.service.ServiceTemplate;

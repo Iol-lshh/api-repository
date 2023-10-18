@@ -1,4 +1,4 @@
-package lshh.apirepository.service.api.resource;
+package lshh.apirepository.service.api.query;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.QueryDto;
-import lshh.apirepository.orm.api.resource.Query;
-import lshh.apirepository.orm.api.resource.QueryRepository;
-import lshh.apirepository.orm.api.resource.ResourcerInfo;
+import lshh.apirepository.orm.api.query.Query;
+import lshh.apirepository.orm.api.query.QueryRepository;
+import lshh.apirepository.orm.api.resourcer.ResourcerInfo;
 import lshh.apirepository.orm.api.router.Router;
+import lshh.apirepository.service.api.resourcer.ResourcerServiceJpa;
 import lshh.apirepository.service.api.router.RouterServiceJpa;
 
 @Service

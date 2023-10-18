@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lshh.apirepository.orm.RegistedInfo;
-import lshh.apirepository.orm.api.resource.Query;
+import lshh.apirepository.orm.api.query.Query;
 import lshh.apirepository.orm.auth.AuthorizedRouter;
 
 @Accessors(chain = true, fluent = true)

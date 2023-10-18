@@ -1,4 +1,4 @@
-package lshh.apirepository.service.api.resource;
+package lshh.apirepository.service.api.resourcer;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.ResourcerDto;
-import lshh.apirepository.orm.api.resource.ResourcerInfo;
-import lshh.apirepository.orm.api.resource.ResourcerInfoRepository;
+import lshh.apirepository.orm.api.resourcer.ResourcerInfo;
+import lshh.apirepository.orm.api.resourcer.ResourcerInfoRepository;
 
 @Service
 public class ResourcerServiceJpa implements ResourcerService{
