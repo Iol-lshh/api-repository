@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -17,6 +18,7 @@ import lshh.apirepository.orm.auth.AuthorizedRouter;
 @Accessors(chain = true, fluent = true)
 @Setter
 @Getter
+@Table(name = "api_router")
 @Entity
 public class Router extends RegistedInfo{
     @Id
@@ -25,6 +27,8 @@ public class Router extends RegistedInfo{
     String name;
     String path;
     String description;
+
+    boolean isDisabeled;
 
     @ManyToOne
     @JoinColumn(name = "query_id")

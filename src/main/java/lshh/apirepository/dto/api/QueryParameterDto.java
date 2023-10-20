@@ -10,5 +10,5 @@ public class QueryParameterDto {
     String name;
     String description;
     String type;
-    String isOptional;
+    boolean isOptional;
 }

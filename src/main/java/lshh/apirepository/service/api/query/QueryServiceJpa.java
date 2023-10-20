@@ -2,6 +2,7 @@ package lshh.apirepository.service.api.query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.orm.api.query.Query;
+import lshh.apirepository.orm.api.query.QueryParameter;
 import lshh.apirepository.orm.api.query.QueryRepository;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfo;
 import lshh.apirepository.orm.api.router.Router;
@@ -46,19 +48,25 @@ public class QueryServiceJpa implements QueryService{
 
     @Override
     public List<QueryDto> findListByResource(int resourceId) {
-        return findEntityByResource(resourceId).stream().map(e->toDto(e)).toList();
+        return findEntityByResource(resourceId).stream().map(this::toDto).toList();
     }
 
     @Override
     public Optional<QueryDto> findByRouter(int routerId) {
-        return findEntityListByRouter(routerId).map(e->toDto(e));
+        return findEntityListByRouter(routerId).map(this::toDto);
     }
 
+    @Override
+    public Optional<QueryDto> find(int id) {
+        return findEntity(id).map(this::toDto);
+    }
+
+    
     @Override
     @Transactional
     public Status save(QueryDto query) {
         queryRepository.save(toEntity(query));
-        query.queryParameterList().forEach(e->queryParameterService.save(e));
+        query.queryParameterList().forEach(queryParameterService::save);
 
         return Status.OK;
     }
@@ -85,5 +93,9 @@ public class QueryServiceJpa implements QueryService{
 
         return queryRepository.findById(maybeRouter.get().query().id());
     }
-    
+ 
+    @Transactional
+    public Optional<Query> findEntity(int id) {
+        return queryRepository.findById(id);
+    }
 }
