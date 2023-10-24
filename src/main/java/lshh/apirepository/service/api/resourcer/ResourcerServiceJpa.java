@@ -2,7 +2,7 @@ package lshh.apirepository.service.api.resourcer;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,36 +25,82 @@ public class ResourcerServiceJpa implements ResourcerService{
             .name(resourcer.name())
             .path(resourcer.path())
             .description(resourcer.description())
-            .key(resourcer.key());
+            .accessName(resourcer.accessName())
+            .key(resourcer.key())
+            .driver(resourcer.driver())
+            .driverClassName(resourcer.driverClassName())
+            .created(resourcer.getCreated())
+            .deleted(resourcer.getDeleted())
+            .isEnabled(resourcer.isEnabled());
     }
 
     public ResourcerInfo toEntity(ResourcerDto dto){
-        return new ResourcerInfo()
+        ResourcerInfo result = new ResourcerInfo()
             .id(dto.id())
             .name(dto.name())
             .path(dto.path())
             .description(dto.description())
-            .key(dto.key());
+            .accessName(dto.accessName())
+            .key(dto.key())
+            .driver(dto.driver())
+            .driverClassName(dto.driverClassName());
+        result.setCreated(dto.created());
+        result.setDeleted(dto.deleted());
+        result.setEnabled(dto.isEnabled());
+        return result;
     }
 
     @Override
     public Optional<ResourcerDto> findByPath(String path) {
-        return findEntity(path).map(e->toDto(e));
+        return findEntity(path).map(this::toDto);
     }
 
     @Override
     public Optional<ResourcerDto> find(int id){
-        return findEntity(id).map(e->toDto(e));
+        return findEntity(id).map(this::toDto);
     }
 
     @Override
     public List<ResourcerDto> findList(int pageSize, int pageNo) {
-       return findEntityList(pageSize, pageNo).stream().map(e->toDto(e)).toList();
+       return findEntityList(pageSize, pageNo).stream().map(this::toDto).toList();
     }
 
     @Override
+    public List<ResourcerDto> findAll(){
+        return findEntityAll().stream().map(this::toDto).toList();
+    }
+
+    @Override
+    @Transactional
     public Status save(ResourcerDto dto) {
-        resourcerRepository.save(toEntity(dto));
+        ResourcerInfo resourcer;
+        
+        if(dto.id()==null){
+            dto.created(LocalDateTime.now());
+            resourcer = toEntity(dto);
+        }else{
+            resourcer = findEntity(dto.id())
+                .orElseGet(()->{
+                    dto.created(LocalDateTime.now());
+                    return toEntity(dto);
+                });
+        }
+
+        resourcer
+            .name(dto.name()!=null ? dto.name() : resourcer.name())
+            .path(dto.path()!=null ? dto.path() : resourcer.path())
+            .description(dto.description() !=null ? dto.description() : resourcer.description())
+            .accessName(dto.accessName() != null ? dto.accessName():resourcer.accessName())
+            .key(dto.key()!=null?dto.key():resourcer.key())
+            .driver(dto.driver()!=null?dto.driver():resourcer.driver())
+            .driverClassName(dto.driverClassName()!=null?dto.driverClassName():resourcer.driverClassName())
+            .setEnabled(dto.isEnabled());
+        
+        if(dto.deleted()!=null){
+            resourcer.setDeleted(dto.deleted());
+        }
+
+        resourcerRepository.save(resourcer);
         return Status.OK;
     }
 
@@ -69,6 +115,11 @@ public class ResourcerServiceJpa implements ResourcerService{
     @Transactional
     public List<ResourcerInfo> findEntityList(int pageSize, int pageNo){
         return resourcerRepository.findAll(Pageable.ofSize(pageSize).withPage(pageNo)).toList();
+    }
+
+    @Transactional
+    public List<ResourcerInfo> findEntityAll(){
+        return resourcerRepository.findAll();
     }
 
     @Transactional

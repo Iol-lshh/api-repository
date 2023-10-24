@@ -1,11 +1,8 @@
 package lshh.apirepository.common.resourcer;
 
 public interface ResourcerContext{
+    public enum Type{DB, API}
     int getId();
-    String getType();
+    Type getType();
     long getStarted();
-
-    Object getResource(Object... args);
-    <T> T getResource(Class<T> requiredType);
-    <T> T getResource(Class<T> requiredType, Object... args);
 }

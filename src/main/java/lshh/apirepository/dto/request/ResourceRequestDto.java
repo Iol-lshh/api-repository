@@ -1,4 +1,4 @@
-package lshh.apirepository.dto.api;
+package lshh.apirepository.dto.request;
 
 public class ResourceRequestDto {
     

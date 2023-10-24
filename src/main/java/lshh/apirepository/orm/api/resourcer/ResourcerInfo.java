@@ -2,9 +2,13 @@ package lshh.apirepository.orm.api.resourcer;
 
 import java.util.Collection;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +23,20 @@ import lshh.apirepository.orm.api.query.Query;
 @Entity
 public class ResourcerInfo extends RegistedInfo{
     @Id
-    int id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    Integer id;
 
     String name;
     String path;
     String description;
 
+    @Column(name = "access_name")
+    String accessName;
     String key;
+
+    String driver;
+    @Column(name="driver_class_name")
+    String driverClassName;
 
     @OneToMany
     Collection<Query> queries;

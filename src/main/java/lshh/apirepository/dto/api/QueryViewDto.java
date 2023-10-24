@@ -1,35 +1,20 @@
 package lshh.apirepository.dto.api;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
-import lshh.apirepository.common.dbhelper.QueryStatement.Parameter.IoType;
 
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Accessors(chain = true, fluent = true)
 @Data
-public class QueryParameterDto {
+public class QueryViewDto {
     @JsonProperty
-    Integer id;
-    
+    QueryDto queryDto;
     @JsonProperty
-    String name;
-    @JsonProperty
-    String description;
-    @JsonProperty
-    IoType ioType;
-    @JsonProperty
-    boolean isOptional;
-
-    @JsonProperty
-    Integer queryId;
-
-    LocalDateTime created;
-    LocalDateTime deleted;
-    boolean isEnabled;
+    List<QueryParameterDto> queryParameterDtos;
 }

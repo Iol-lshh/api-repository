@@ -2,7 +2,10 @@ package lshh.apirepository.orm.api.router;
 
 import java.util.Collection;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -22,13 +25,15 @@ import lshh.apirepository.orm.auth.AuthorizedRouter;
 @Entity
 public class Router extends RegistedInfo{
     @Id
-    int id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    Integer id;
 
     String name;
     String path;
     String description;
 
-    boolean isDisabeled;
+    @Column(name = "is_disabled")
+    boolean isDisabled;
 
     @ManyToOne
     @JoinColumn(name = "query_id")

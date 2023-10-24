@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lshh.apirepository.dto.api.QueryDto;
+import lshh.apirepository.dto.api.QueryViewDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
 import lshh.apirepository.service.api.query.QueryService;
 
@@ -18,18 +21,27 @@ public class QueryController {
     @Autowired
     QueryService queryService;
 
-    @GetMapping("/list/{resourceId}")
-    public List<QueryDto> findList(int resourceId){
-        return queryService.findListByResource(resourceId);
+    @GetMapping("/list/{resourcerId}")
+    public List<QueryDto> findList(@PathVariable("resourcerId") int resourcerId){
+        System.out.println(resourcerId);
+        return queryService.findListByResource(resourcerId);
     }
 
     @GetMapping("/{queryId}")
-    public QueryDto find(int queryId){
-        return queryService.find(queryId).orElseGet(null);
+    public QueryDto find(@PathVariable int queryId){
+        return queryService.find(queryId)
+            .orElse(null);
     }
 
-    @PostMapping("/new")
-    public Status save(QueryDto dto){
+    @GetMapping("/view/{queryId}")
+    public QueryViewDto
+     findView(@PathVariable int queryId) throws Exception{
+        return queryService.findView(queryId);
+    }
+
+    @PostMapping("")
+    public Status save(@RequestBody QueryDto dto) throws Exception{
+        System.out.println(dto);
         queryService.save(dto);
         return Status.OK;
     }

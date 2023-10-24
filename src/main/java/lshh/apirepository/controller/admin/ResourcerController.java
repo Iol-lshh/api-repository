@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lshh.apirepository.dto.api.ResourcerDto;
@@ -26,20 +27,25 @@ public class ResourcerController {
         return Status.OK;
     }
 
-    @PostMapping("/new")
-    public Status create(ResourcerDto dto){
+    @PostMapping("")
+    public Status save(@RequestBody ResourcerDto dto){
         resourcerService.save(dto);
         return Status.OK;
     }
 
     @GetMapping("/list/{pageSize}/{pageNo}")
-    public List<ResourcerDto> findList(@RequestParam int pageSize, @RequestParam int pageNo){
+    public List<ResourcerDto> findList(@PathVariable("pageSize") int pageSize, @PathVariable("pageNo") int pageNo){
         return resourcerService.findList(pageSize, pageNo);
     }
 
+    @GetMapping("/list/all")
+    public List<ResourcerDto> findAll(){
+        return resourcerService.findAll();
+    }
+
     @GetMapping("/{resourcerId}")
-    public ResourcerDto find(int resourcerId){
+    public ResourcerDto find(@PathVariable int resourcerId){
         return resourcerService.find(resourcerId)
-            .orElseGet(null);
+            .orElse(null);
     }
 }

@@ -10,6 +10,7 @@ public interface ResourcerService extends ServiceTemplate{
     Optional<ResourcerDto> findByPath(String path);
  
     List<ResourcerDto> findList(int pageSize, int pageNo);
+    List<ResourcerDto> findAll();
 
     Status save(ResourcerDto resourcer);
 

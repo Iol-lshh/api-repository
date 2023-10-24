@@ -2,13 +2,15 @@ package lshh.apirepository.service.api.query;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.QueryDto;
+import lshh.apirepository.dto.api.QueryParameterDto;
+import lshh.apirepository.dto.api.QueryViewDto;
 import lshh.apirepository.orm.api.query.Query;
 import lshh.apirepository.orm.api.query.QueryParameter;
 import lshh.apirepository.orm.api.query.QueryRepository;
@@ -30,20 +32,28 @@ public class QueryServiceJpa implements QueryService{
     @Autowired
     QueryParameterServiceJpa queryParameterService;
 
+    @Transactional
     public QueryDto toDto(Query entity){
         return new QueryDto()
             .id(entity.id())
             .name(entity.name())
             .contents(entity.contents())
             .description(entity.description())
-            .queryParameterList(entity.queryParameters().stream().map(e->queryParameterService.toDto(e)).toList());
+            .created(entity.getCreated())
+            .deleted(entity.getDeleted())
+            .isEnabled(entity.isEnabled());
     }
     public Query toEntity(QueryDto dto){
-        return new Query()
+        Query result = new Query()
             .id(dto.id())
             .name(dto.name())
             .contents(dto.contents())
             .description(dto.description());
+        result.setCreated(dto.created());
+        result.setDeleted(dto.deleted());
+        result.setEnabled(dto.isEnabled());
+        
+        return result;
     }
 
     @Override
@@ -61,12 +71,51 @@ public class QueryServiceJpa implements QueryService{
         return findEntity(id).map(this::toDto);
     }
 
+    @Override
+    @Transactional
+    public QueryViewDto findView(int id) throws Exception{
+        Optional<Query> maybeQuery = findEntity(id);
+        QueryDto queryDto = maybeQuery.map(this::toDto).orElseThrow(()->new Exception("no Query"));
+ 
+        List<QueryParameter> parameters = maybeQuery.map(e->e.queryParameters().stream().toList()).get();
+        List<QueryParameterDto> parameterDtos = parameters.stream().map(queryParameterService::toDto).toList();
+        return new QueryViewDto()
+            .queryDto(queryDto)
+            .queryParameterDtos(parameterDtos);
+    }
+
     
     @Override
     @Transactional
-    public Status save(QueryDto query) {
-        queryRepository.save(toEntity(query));
-        query.queryParameterList().forEach(queryParameterService::save);
+    public Status save(QueryDto dto) throws Exception {
+        Query query;
+
+        if(dto.id()==null){
+            dto.created(LocalDateTime.now());
+            query = toEntity(dto);
+        }else{
+            query = findEntity(dto.id())
+                .orElseGet(()->{
+                    dto.created(LocalDateTime.now());
+                    return toEntity(dto);
+                });
+        }
+        
+        query
+            .name(dto.name()!=null?dto.name():query.name())
+            .contents(dto.contents()!=null?dto.contents():query.contents())
+            .description(dto.description()!=null?dto.description():query.description())
+            .setEnabled(dto.isEnabled());
+
+        if(dto.deleted()!=null){
+            query.setDeleted(dto.deleted());
+        }
+
+        ResourcerInfo resourcer = resourcerService.findEntity(dto.resourcerId())
+            .orElseThrow(()->new Exception("resourcer 참조 오류"));
+        query.resourcerInfo(resourcer);
+
+        queryRepository.save(query);
 
         return Status.OK;
     }
