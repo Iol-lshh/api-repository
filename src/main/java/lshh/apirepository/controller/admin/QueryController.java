@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.dto.api.QueryViewDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
+import lshh.apirepository.service.api.query.QueryParameterService;
 import lshh.apirepository.service.api.query.QueryService;
 
 @RequestMapping("/query")
@@ -20,6 +21,9 @@ import lshh.apirepository.service.api.query.QueryService;
 public class QueryController {
     @Autowired
     QueryService queryService;
+
+    @Autowired
+    QueryParameterService queryParameterService;
 
     @GetMapping("/list/{resourcerId}")
     public List<QueryDto> findList(@PathVariable("resourcerId") int resourcerId){
@@ -40,7 +44,7 @@ public class QueryController {
     }
 
     @PostMapping("")
-    public Status save(@RequestBody QueryDto dto) throws Exception{
+    public Status save(@RequestBody QueryViewDto dto) throws Exception{
         System.out.println(dto);
         queryService.save(dto);
         return Status.OK;

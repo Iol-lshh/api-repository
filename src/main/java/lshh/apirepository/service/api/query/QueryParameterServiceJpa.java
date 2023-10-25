@@ -2,6 +2,8 @@ package lshh.apirepository.service.api.query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
 
@@ -50,7 +52,7 @@ public class QueryParameterServiceJpa implements QueryParameterService{
             dto.created(LocalDateTime.now());
             entity = toEntity(dto);
         }else{
-            entity = findEntity(dto.id())
+            entity = queryParameterRepository.findById(dto.id())
                 .orElseGet(()->{
                     dto.created(LocalDateTime.now());
                     return toEntity(dto);
@@ -65,7 +67,10 @@ public class QueryParameterServiceJpa implements QueryParameterService{
         return Status.OK;
     }
 
-    public Optional<QueryParameter> findEntity(int id){
-        return queryParameterRepository.findById(id);
+    @Override
+    @Transactional
+    public Status save(Query query, List<QueryParameterDto> dtos) throws Exception {
+        queryParameterRepository.saveAll(dtos.stream().map(e-> toEntity(e).query(query)).toList());
+        return Status.OK;
     }
 }

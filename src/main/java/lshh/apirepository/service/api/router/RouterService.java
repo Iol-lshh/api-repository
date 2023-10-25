@@ -14,4 +14,5 @@ public interface RouterService extends ServiceTemplate{
     Optional<RouterDto> find(int id);
     List<RouterDto> findAll();
     RouterViewDto findView(int id) throws Exception;
+    Optional<RouterDto> findByPath(String path);
 }

@@ -32,7 +32,6 @@ public class QueryServiceJpa implements QueryService{
     @Autowired
     QueryParameterServiceJpa queryParameterService;
 
-    @Transactional
     public QueryDto toDto(Query entity){
         return new QueryDto()
             .id(entity.id())
@@ -41,6 +40,7 @@ public class QueryServiceJpa implements QueryService{
             .description(entity.description())
             .created(entity.getCreated())
             .deleted(entity.getDeleted())
+            .resourcerId(entity.resourcerId())
             .isEnabled(entity.isEnabled());
     }
     public Query toEntity(QueryDto dto){
@@ -48,7 +48,8 @@ public class QueryServiceJpa implements QueryService{
             .id(dto.id())
             .name(dto.name())
             .contents(dto.contents())
-            .description(dto.description());
+            .description(dto.description())
+            .resourcerId(dto.resourcerId());
         result.setCreated(dto.created());
         result.setDeleted(dto.deleted());
         result.setEnabled(dto.isEnabled());
@@ -58,23 +59,34 @@ public class QueryServiceJpa implements QueryService{
 
     @Override
     public List<QueryDto> findListByResource(int resourceId) {
-        return findEntityByResource(resourceId).stream().map(this::toDto).toList();
+
+        Optional<ResourcerInfo> maybeResourcer = resourcerInfoRepository.findById(resourceId);
+        if(maybeResourcer.isEmpty()){
+            return List.of();
+        }
+        return queryRepository.findByResourcerId(maybeResourcer.get().id())
+            .stream().map(this::toDto).toList();
     }
 
     @Override
     public Optional<QueryDto> findByRouter(int routerId) {
-        return findEntityListByRouter(routerId).map(this::toDto);
+
+        Optional<Router> maybeRouter = routerRepository.findById(routerId);
+        if(maybeRouter.isEmpty()){
+            return Optional.empty();
+        }
+        return queryRepository.findById(maybeRouter.get().queryId())
+            .map(this::toDto);
     }
 
     @Override
     public Optional<QueryDto> find(int id) {
-        return findEntity(id).map(this::toDto);
+        return queryRepository.findById(id).map(this::toDto);
     }
 
     @Override
-    @Transactional
     public QueryViewDto findView(int id) throws Exception{
-        Optional<Query> maybeQuery = findEntity(id);
+        Optional<Query> maybeQuery = queryRepository.findById(id);
         QueryDto queryDto = maybeQuery.map(this::toDto).orElseThrow(()->new Exception("no Query"));
  
         List<QueryParameter> parameters = maybeQuery.map(e->e.queryParameters().stream().toList()).get();
@@ -86,7 +98,15 @@ public class QueryServiceJpa implements QueryService{
 
     
     @Override
-    @Transactional
+    public Status save(QueryViewDto viewDto) throws Exception {
+
+        QueryDto dto = viewDto.queryDto();
+
+        return save(dto);
+        
+    }
+    
+    @Override
     public Status save(QueryDto dto) throws Exception {
         Query query;
 
@@ -94,7 +114,7 @@ public class QueryServiceJpa implements QueryService{
             dto.created(LocalDateTime.now());
             query = toEntity(dto);
         }else{
-            query = findEntity(dto.id())
+            query = queryRepository.findById(dto.id())
                 .orElseGet(()->{
                     dto.created(LocalDateTime.now());
                     return toEntity(dto);
@@ -113,38 +133,10 @@ public class QueryServiceJpa implements QueryService{
 
         ResourcerInfo resourcer = resourcerInfoRepository.findById(dto.resourcerId())
             .orElseThrow(()->new Exception("resourcer 참조 오류"));
-        query.resourcerInfo(resourcer);
+        query.resourcerId(resourcer.id());
 
         queryRepository.save(query);
 
         return Status.OK;
-    }
-
-    ///////////////////
-    @Transactional
-    public List<Query> findEntityByResource(int resourceId){
-        Optional<ResourcerInfo> maybeResourcer = resourcerInfoRepository.findById(resourceId);
-
-        if(maybeResourcer.isEmpty()){
-            return List.of();
-        }
-
-        return queryRepository.findByResourcerInfo(maybeResourcer.get());
-    }
-
-    @Transactional
-    public Optional<Query> findEntityListByRouter(int routerId){
-        Optional<Router> maybeRouter = routerRepository.findById(routerId);
-
-        if(maybeRouter.isEmpty()){
-            return Optional.empty();
-        }
-
-        return queryRepository.findById(maybeRouter.get().queryId());
-    }
- 
-    @Transactional
-    public Optional<Query> findEntity(int id) {
-        return queryRepository.findById(id);
     }
 }

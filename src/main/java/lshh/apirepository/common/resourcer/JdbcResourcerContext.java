@@ -28,6 +28,7 @@ public class JdbcResourcerContext implements ResourcerContext{
     QueryManager queryManager;
 
     public JdbcResourcerContext(int id, Type type, String name, DataSource dataSource){
+        
         this.id=id;
         this.type=type;
         this.name=name;
@@ -37,9 +38,11 @@ public class JdbcResourcerContext implements ResourcerContext{
         this.queryManager = new PlainTextQueryManager(dataSource);
     }
 
-    public List<Map<String, Object>> getResource(QueryRequestDto dto) throws Exception{
-        QueryStatement statement = queryManager.createStatement();
-        statement.setQuery(dto.query());
+    public List<Map<String, Object>> getResource(QueryRequestDto dto) throws Exception {
+        
+        QueryStatement statement = queryManager.createStatement()
+            .setQuery(dto.query());
+            
         for(QueryArgumentDto arg:dto.arguments()){
             statement.addParam(arg.parameter().name(), arg.value());
         }
@@ -47,8 +50,10 @@ public class JdbcResourcerContext implements ResourcerContext{
     }
 
     public <T> List<T> getResource(QueryRequestDto dto, Class<T> requiredType) throws Exception {
-        QueryStatement statement = queryManager.createStatement();
-        statement.setQuery(dto.query());
+        
+        QueryStatement statement = queryManager.createStatement()
+            .setQuery(dto.query());
+
         for(QueryArgumentDto arg:dto.arguments()){
             statement.addParam(arg.parameter().name(), arg.value());
         }

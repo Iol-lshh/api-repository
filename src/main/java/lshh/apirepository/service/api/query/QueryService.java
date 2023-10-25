@@ -14,4 +14,6 @@ public interface QueryService extends ServiceTemplate{
     QueryViewDto findView(int id) throws Exception;
 
     Status save(QueryDto query) throws Exception;
+    Status save(QueryViewDto queryView) throws Exception;
+
 }

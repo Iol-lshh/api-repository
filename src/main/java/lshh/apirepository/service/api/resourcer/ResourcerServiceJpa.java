@@ -60,26 +60,27 @@ public class ResourcerServiceJpa implements ResourcerService{
 
     @Override
     public Optional<ResourcerDto> findByPath(String path) {
-        return findEntity(path).map(this::toDto);
+        return  resourcerRepository.findOneByPath(path).map(this::toDto);
     }
 
     @Override
     public Optional<ResourcerDto> find(int id){
-        return findEntity(id).map(this::toDto);
+        return resourcerRepository.findById(id).map(this::toDto);
     }
 
     @Override
     public List<ResourcerDto> findList(int pageSize, int pageNo) {
-       return findEntityList(pageSize, pageNo).stream().map(this::toDto).toList();
+        return resourcerRepository.findAll(Pageable.ofSize(pageSize).withPage(pageNo))
+            .stream().map(this::toDto).toList();
     }
 
     @Override
     public List<ResourcerDto> findAll(){
-        return findEntityAll().stream().map(this::toDto).toList();
+        return resourcerRepository.findAll()
+            .stream().map(this::toDto).toList();
     }
 
     @Override
-    @Transactional
     public Status save(ResourcerDto dto) {
         ResourcerInfo resourcer;
         
@@ -88,7 +89,7 @@ public class ResourcerServiceJpa implements ResourcerService{
             resourcer = toEntity(dto);
         }else{
             resourcerManager.deallocateResourcer(dto.id());
-            resourcer = findEntity(dto.id())
+            resourcer = resourcerRepository.findById(dto.id())
                 .orElseGet(()->{
                     dto.created(LocalDateTime.now());
                     return toEntity(dto);
@@ -112,28 +113,4 @@ public class ResourcerServiceJpa implements ResourcerService{
         resourcerRepository.save(resourcer);
         return Status.OK;
     }
-
-    
-    ////////////////////////////////////////////////////////////
-
-    @Transactional
-    public Optional<ResourcerInfo> findEntity(String path){
-        return resourcerRepository.findOneByPath(path);
-    }
-
-    @Transactional
-    public List<ResourcerInfo> findEntityList(int pageSize, int pageNo){
-        return resourcerRepository.findAll(Pageable.ofSize(pageSize).withPage(pageNo)).toList();
-    }
-
-    @Transactional
-    public List<ResourcerInfo> findEntityAll(){
-        return resourcerRepository.findAll();
-    }
-
-    @Transactional
-    public Optional<ResourcerInfo> findEntity(int id){
-        return resourcerRepository.findById(id);
-    }
-
 }

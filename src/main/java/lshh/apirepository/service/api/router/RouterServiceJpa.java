@@ -61,7 +61,6 @@ public class RouterServiceJpa implements RouterService {
     }
 
     @Override
-    @Transactional
     public Status save(RouterDto dto) {
         Router router;
         
@@ -69,7 +68,7 @@ public class RouterServiceJpa implements RouterService {
             dto.created(LocalDateTime.now());
             router = toEntity(dto);
         }else{
-            router = findEntity(dto.id())
+            router = routerRepository.findById(dto.id())
                 .orElseGet(()->{
                     dto.created(LocalDateTime.now());
                     return toEntity(dto);
@@ -99,17 +98,23 @@ public class RouterServiceJpa implements RouterService {
 
     @Override
     public List<RouterDto> findList(int pageSize, int pageNo) {
-        return findEntityList(pageSize, pageNo).stream().map(this::toDto).toList();
+        return routerRepository
+            .findAll(Pageable.ofSize(pageSize).withPage(pageNo))
+            .map(this::toDto).toList();
     }
 
     @Override
     public Optional<RouterDto> find(int id) {
-        return findEntity(id).map(this::toDto);
+        return routerRepository
+            .findById(id)
+            .map(this::toDto);
     }
 
     @Override
     public List<RouterDto> findAll(){
-        return findEntityAll().stream().map(this::toDto).toList();
+        return routerRepository
+            .findAll()
+            .stream().map(this::toDto).toList();
     }
 
     @Override
@@ -127,7 +132,8 @@ public class RouterServiceJpa implements RouterService {
             && queryViewDto.queryDto() != null 
             && queryViewDto.queryDto().resourcerId() != null){
 
-            resourcerDto = resourcerService.find(queryViewDto.queryDto().resourcerId())
+            resourcerDto = resourcerService
+                .find(queryViewDto.queryDto().resourcerId())
                 .orElse(null);
         }
 
@@ -137,19 +143,8 @@ public class RouterServiceJpa implements RouterService {
             .resourcer(resourcerDto);
     }
 
-    ///////////
-    @Transactional
-    public Optional<Router> findEntity(int id) {
-        return routerRepository.findById(id);
-    }
-    
-    @Transactional
-    public List<Router> findEntityList(int pageSize, int pageNo) {
-        return routerRepository.findAll(Pageable.ofSize(pageSize).withPage(pageNo)).toList();
-    }
-
-    @Transactional
-    public List<Router> findEntityAll(){
-        return routerRepository.findAll();
+    @Override
+    public Optional<RouterDto> findByPath(String path){
+        return routerRepository.findByPath(path).map(this::toDto);
     }
 }

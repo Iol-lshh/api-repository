@@ -37,7 +37,4 @@ public class ResourcerInfo extends RegistedInfo{
     String driver;
     @Column(name="driver_class_name")
     String driverClassName;
-
-    @OneToMany(mappedBy = "resourcerInfo")
-    Collection<Query> queries;
 }

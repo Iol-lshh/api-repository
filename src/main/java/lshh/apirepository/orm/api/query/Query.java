@@ -2,6 +2,7 @@ package lshh.apirepository.orm.api.query;
 
 import java.util.Collection;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -32,9 +33,8 @@ public class Query extends RegistedInfo {
     String contents;
     String description;
 
-    @ManyToOne
-    @JoinColumn(name = "resourcer_id")
-    ResourcerInfo resourcerInfo;
+    @Column(name = "resourcer_id")
+    Integer resourcerId;
 
     @OneToMany(mappedBy = "query", fetch = FetchType.EAGER)
     Collection<QueryParameter> queryParameters;
