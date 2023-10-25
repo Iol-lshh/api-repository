@@ -29,9 +29,6 @@ public class Router extends RegistedInfo{
     String path;
     String description;
 
-    @Column(name = "is_disabled")
-    boolean isDisabled;
-
     @Column(name = "query_id")
     Integer queryId;
 

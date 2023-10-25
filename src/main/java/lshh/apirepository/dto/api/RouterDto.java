@@ -22,9 +22,6 @@ public class RouterDto {
     String path;
     @JsonProperty
     String description;
-
-    @JsonProperty
-    boolean isDisabled;
     
     @JsonProperty
     Integer queryId;

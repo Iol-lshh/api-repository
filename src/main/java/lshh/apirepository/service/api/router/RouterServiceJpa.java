@@ -39,7 +39,6 @@ public class RouterServiceJpa implements RouterService {
             .name(entity.name())
             .path(entity.path())
             .description(entity.description())
-            .isDisabled(entity.isDisabled())
             .queryId(entity.queryId())
             .created(entity.getCreated())
             .deleted(entity.getDeleted())
@@ -52,8 +51,7 @@ public class RouterServiceJpa implements RouterService {
             .name(dto.name())
             .path(dto.path())
             .description(dto.description())
-            .queryId(dto.queryId())
-            .isDisabled(dto.isDisabled());
+            .queryId(dto.queryId());
         result.setCreated(dto.created());
         result.setDeleted(dto.deleted());
         result.setEnabled(dto.isEnabled());
@@ -84,7 +82,6 @@ public class RouterServiceJpa implements RouterService {
             .name(dto.name()!=null?dto.name():router.name())
             .path(dto.path()!=null?dto.path():router.path())
             .description(dto.description()!=null?dto.description():router.description())
-            .isDisabled(dto.isDisabled())
             .queryId(query.id())
             .setEnabled(dto.isEnabled());
 
