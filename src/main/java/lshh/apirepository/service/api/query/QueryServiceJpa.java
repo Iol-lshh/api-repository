@@ -18,8 +18,6 @@ import lshh.apirepository.orm.api.resourcer.ResourcerInfo;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfoRepository;
 import lshh.apirepository.orm.api.router.Router;
 import lshh.apirepository.orm.api.router.RouterRepository;
-import lshh.apirepository.service.api.resourcer.ResourcerServiceJpa;
-import lshh.apirepository.service.api.router.RouterServiceJpa;
 
 @Service
 public class QueryServiceJpa implements QueryService{
