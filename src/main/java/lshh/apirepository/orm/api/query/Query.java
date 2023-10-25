@@ -3,6 +3,7 @@ package lshh.apirepository.orm.api.query;
 import java.util.Collection;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,9 +23,9 @@ import lshh.apirepository.orm.api.router.Router;
 @Getter
 @Table(name = "api_query")
 @Entity
-public class Query extends RegistedInfo{
+public class Query extends RegistedInfo {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     String name;
@@ -32,12 +33,9 @@ public class Query extends RegistedInfo{
     String description;
 
     @ManyToOne
-    @JoinColumn(name="resourcer_id")
+    @JoinColumn(name = "resourcer_id")
     ResourcerInfo resourcerInfo;
 
-    @OneToMany(mappedBy = "query")
+    @OneToMany(mappedBy = "query", fetch = FetchType.EAGER)
     Collection<QueryParameter> queryParameters;
-
-    @OneToMany(mappedBy = "query")
-    Collection<Router> routers;
 }

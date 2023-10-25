@@ -8,25 +8,29 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import lshh.apirepository.common.dbhelper.PlainTextQueryManager;
 import lshh.apirepository.common.dbhelper.QueryManager;
 import lshh.apirepository.common.dbhelper.QueryStatement;
 import lshh.apirepository.dto.request.QueryArgumentDto;
 import lshh.apirepository.dto.request.QueryRequestDto;
 
+@Accessors(fluent = true)
 @Getter
 public class JdbcResourcerContext implements ResourcerContext{
 
-    final int id;
-    final Type type;
-    final long started;
-    final DataSource dataSource;
+    int id;
+    Type type;
+    String name;
+    long started;
+    DataSource dataSource;
 
     QueryManager queryManager;
 
-    public JdbcResourcerContext(int id, Type type, DataSource dataSource){
+    public JdbcResourcerContext(int id, Type type, String name, DataSource dataSource){
         this.id=id;
         this.type=type;
+        this.name=name;
         this.started=LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli();
         this.dataSource=dataSource;
 
@@ -49,5 +53,6 @@ public class JdbcResourcerContext implements ResourcerContext{
             statement.addParam(arg.parameter().name(), arg.value());
         }
         return statement.queryByClass(requiredType);
-    }    
+    }
+
 }

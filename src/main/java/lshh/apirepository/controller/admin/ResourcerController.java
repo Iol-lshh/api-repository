@@ -1,6 +1,8 @@
 package lshh.apirepository.controller.admin;
 
 import java.util.List;
+import java.util.Map;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lshh.apirepository.common.resourcer.JdbcResourcerManager;
+import lshh.apirepository.common.resourcer.ResourcerContext;
+import lshh.apirepository.dto.api.ResourcerContextDto;
 import lshh.apirepository.dto.api.ResourcerDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
 import lshh.apirepository.service.api.resourcer.ResourcerService;
@@ -21,6 +26,8 @@ public class ResourcerController {
     @Autowired
     ResourcerService resourcerService;
 
+    @Autowired
+    JdbcResourcerManager resourcerManager;
 
     @GetMapping("/test")
     public Status test(){
@@ -47,5 +54,10 @@ public class ResourcerController {
     public ResourcerDto find(@PathVariable int resourcerId){
         return resourcerService.find(resourcerId)
             .orElse(null);
+    }
+
+    @GetMapping("/cachedList")
+    public List<ResourcerContextDto> getCachedList(){
+        return resourcerManager.getContextList();
     }
 }

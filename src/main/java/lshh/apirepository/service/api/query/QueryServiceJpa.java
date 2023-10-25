@@ -15,7 +15,9 @@ import lshh.apirepository.orm.api.query.Query;
 import lshh.apirepository.orm.api.query.QueryParameter;
 import lshh.apirepository.orm.api.query.QueryRepository;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfo;
+import lshh.apirepository.orm.api.resourcer.ResourcerInfoRepository;
 import lshh.apirepository.orm.api.router.Router;
+import lshh.apirepository.orm.api.router.RouterRepository;
 import lshh.apirepository.service.api.resourcer.ResourcerServiceJpa;
 import lshh.apirepository.service.api.router.RouterServiceJpa;
 
@@ -26,9 +28,9 @@ public class QueryServiceJpa implements QueryService{
     QueryRepository queryRepository;
 
     @Autowired
-    ResourcerServiceJpa resourcerService;
+    ResourcerInfoRepository resourcerInfoRepository;
     @Autowired
-    RouterServiceJpa routerService;
+    RouterRepository routerRepository;
     @Autowired
     QueryParameterServiceJpa queryParameterService;
 
@@ -111,7 +113,7 @@ public class QueryServiceJpa implements QueryService{
             query.setDeleted(dto.deleted());
         }
 
-        ResourcerInfo resourcer = resourcerService.findEntity(dto.resourcerId())
+        ResourcerInfo resourcer = resourcerInfoRepository.findById(dto.resourcerId())
             .orElseThrow(()->new Exception("resourcer 참조 오류"));
         query.resourcerInfo(resourcer);
 
@@ -123,7 +125,7 @@ public class QueryServiceJpa implements QueryService{
     ///////////////////
     @Transactional
     public List<Query> findEntityByResource(int resourceId){
-        Optional<ResourcerInfo> maybeResourcer = resourcerService.findEntity(resourceId);
+        Optional<ResourcerInfo> maybeResourcer = resourcerInfoRepository.findById(resourceId);
 
         if(maybeResourcer.isEmpty()){
             return List.of();
@@ -134,13 +136,13 @@ public class QueryServiceJpa implements QueryService{
 
     @Transactional
     public Optional<Query> findEntityListByRouter(int routerId){
-        Optional<Router> maybeRouter = routerService.findEntity(routerId);
+        Optional<Router> maybeRouter = routerRepository.findById(routerId);
 
         if(maybeRouter.isEmpty()){
             return Optional.empty();
         }
 
-        return queryRepository.findById(maybeRouter.get().query().id());
+        return queryRepository.findById(maybeRouter.get().queryId());
     }
  
     @Transactional

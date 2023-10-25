@@ -35,9 +35,8 @@ public class Router extends RegistedInfo{
     @Column(name = "is_disabled")
     boolean isDisabled;
 
-    @ManyToOne
-    @JoinColumn(name = "query_id")
-    Query query;
+    @Column(name = "query_id")
+    Integer queryId;
 
     @OneToMany
     Collection<AuthorizedRouter> authorizedRouters;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lshh.apirepository.dto.api.RouterDto;
+import lshh.apirepository.dto.api.RouterViewDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
 import lshh.apirepository.service.api.router.RouterService;
 
@@ -35,6 +36,11 @@ public class RouterController {
     public RouterDto find(@PathVariable int routerId){
         return routerService.find(routerId)
             .orElse(null);
+    }
+
+    @GetMapping("/view/{routerId}")
+    public RouterViewDto findView(@PathVariable int routerId) throws Exception{
+        return routerService.findView(routerId);
     }
 
     @GetMapping("/list/all")

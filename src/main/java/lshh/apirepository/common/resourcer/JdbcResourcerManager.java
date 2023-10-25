@@ -2,6 +2,7 @@ package lshh.apirepository.common.resourcer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 import javax.sql.DataSource;
 
@@ -12,6 +13,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import lshh.apirepository.common.resourcer.ResourcerContext.Type;
+import lshh.apirepository.dto.api.ResourcerContextDto;
 import lshh.apirepository.dto.api.ResourcerDto;
 import lshh.apirepository.service.api.resourcer.ResourcerService;
 
@@ -22,12 +24,12 @@ public class JdbcResourcerManager implements ResourcerManager {
     JdbcResourcerFactory factory;
     Map<Integer, ResourcerContext> resourcerMap;
 
-
     // todo 최초에, 디비로부터 가져와 생성
     public JdbcResourcerManager(@Autowired ResourcerService resourcerService) throws Exception{
         this.resourcerService = resourcerService;
+        resourcerService.setResourcerManager(this);
         this.factory = new JdbcResourcerFactory();
-        this.resourcerMap = Map.of();
+        this.resourcerMap = new HashMap();
         initMap();
     }
 
@@ -36,7 +38,7 @@ public class JdbcResourcerManager implements ResourcerManager {
         for(ResourcerDto dto : dtos){
             try{
                 DataSource dataSource = createDataSource(dto);
-                this.factory.initResourcer(dto.id(), dataSource);
+                this.factory.initResourcer(dto.id(), dto.name(), dataSource);
             }catch(Exception e){
                 System.out.println("[Create Resourcer Error]: " + dto.id() + ", " + dto.name());
                 // 에러난 것은 넘어가기..
@@ -48,11 +50,12 @@ public class JdbcResourcerManager implements ResourcerManager {
     class JdbcResourcerFactory implements ResourcerFactory{
 
         @Override
-        public ResourcerContext initResourcer(int id, DataSource dataSource) throws Exception {
+        public ResourcerContext initResourcer(int id, String name, DataSource dataSource) throws Exception {
     
             JdbcResourcerContext jdbcResourcer = new JdbcResourcerContext(
                 id,
                 Type.DB,
+                name,
                 dataSource
             );
             return resourcerMap.put(id, jdbcResourcer);
@@ -75,7 +78,7 @@ public class JdbcResourcerManager implements ResourcerManager {
         if(resourcer == null){
             ResourcerDto dto = resourcerService.find(id).orElseThrow(()->new Exception("제공하지 않는 리소서"));
             DataSource dataSource = createDataSource(dto);
-            resourcer = factory.initResourcer(id, dataSource);
+            resourcer = factory.initResourcer(id, dto.name(), dataSource);
         }
         return resourcer;
     }
@@ -101,6 +104,17 @@ public class JdbcResourcerManager implements ResourcerManager {
     public boolean deallocateResourcer(int id) {
         resourcerMap.remove(id);
         return true;
+    }
+
+    @Override
+    public List<ResourcerContextDto> getContextList() {
+        return this.resourcerMap.values().stream()
+            .map(e->new ResourcerContextDto()
+                .id(e.id())
+                .type(e.type())
+                .name(e.name())
+                .started(e.started())
+            ).toList();
     }
 
 }

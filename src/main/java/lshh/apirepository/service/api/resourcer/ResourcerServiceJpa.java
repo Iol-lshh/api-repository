@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lshh.apirepository.common.resourcer.ResourcerManager;
 import lshh.apirepository.dto.api.ResourcerDto;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfo;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfoRepository;
@@ -18,6 +19,13 @@ public class ResourcerServiceJpa implements ResourcerService{
     
     @Autowired
     ResourcerInfoRepository resourcerRepository;
+
+    ResourcerManager resourcerManager;
+
+    @Override
+    public void setResourcerManager(ResourcerManager manager){
+        this.resourcerManager = manager;
+    }
 
     public ResourcerDto toDto(ResourcerInfo resourcer){
         return new ResourcerDto()
@@ -79,6 +87,7 @@ public class ResourcerServiceJpa implements ResourcerService{
             dto.created(LocalDateTime.now());
             resourcer = toEntity(dto);
         }else{
+            resourcerManager.deallocateResourcer(dto.id());
             resourcer = findEntity(dto.id())
                 .orElseGet(()->{
                     dto.created(LocalDateTime.now());
