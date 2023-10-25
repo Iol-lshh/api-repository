@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.dto.api.QueryViewDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
@@ -27,7 +28,6 @@ public class QueryController {
 
     @GetMapping("/list/{resourcerId}")
     public List<QueryDto> findList(@PathVariable("resourcerId") int resourcerId){
-        System.out.println(resourcerId);
         return queryService.findListByResource(resourcerId);
     }
 
@@ -38,14 +38,13 @@ public class QueryController {
     }
 
     @GetMapping("/view/{queryId}")
-    public QueryViewDto
-     findView(@PathVariable int queryId) throws Exception{
+    public QueryViewDto findView(@PathVariable int queryId) throws Exception{
         return queryService.findView(queryId);
     }
 
     @PostMapping("")
-    public Status save(@RequestBody QueryViewDto dto) throws Exception{
-        System.out.println(dto);
+    @Transactional
+    public Status save(@RequestBody QueryDto dto) throws Exception{
         queryService.save(dto);
         return Status.OK;
     }

@@ -44,7 +44,7 @@ public class JdbcResourcerContext implements ResourcerContext{
             .setQuery(dto.query());
             
         for(QueryArgumentDto arg:dto.arguments()){
-            statement.addParam(arg.parameter().name(), arg.value());
+            statement.addParam(arg.queryParameterName(), arg.value());
         }
         return statement.query();
     }
@@ -55,7 +55,7 @@ public class JdbcResourcerContext implements ResourcerContext{
             .setQuery(dto.query());
 
         for(QueryArgumentDto arg:dto.arguments()){
-            statement.addParam(arg.parameter().name(), arg.value());
+            statement.addParam(arg.queryParameterName(), arg.value());
         }
         return statement.queryByClass(requiredType);
     }

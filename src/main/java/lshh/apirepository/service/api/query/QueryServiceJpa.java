@@ -89,21 +89,14 @@ public class QueryServiceJpa implements QueryService{
         Optional<Query> maybeQuery = queryRepository.findById(id);
         QueryDto queryDto = maybeQuery.map(this::toDto).orElseThrow(()->new Exception("no Query"));
  
-        List<QueryParameter> parameters = maybeQuery.map(e->e.queryParameters().stream().toList()).get();
-        List<QueryParameterDto> parameterDtos = parameters.stream().map(queryParameterService::toDto).toList();
+        if(queryDto.id() ==null){
+            return new QueryViewDto();
+        }
+
+        List<QueryParameterDto> parameterDtos = queryParameterService.findList(queryDto.id());
         return new QueryViewDto()
-            .queryDto(queryDto)
-            .queryParameterDtos(parameterDtos);
-    }
-
-    
-    @Override
-    public Status save(QueryViewDto viewDto) throws Exception {
-
-        QueryDto dto = viewDto.queryDto();
-
-        return save(dto);
-        
+            .query(queryDto)
+            .queryParameters(parameterDtos);
     }
     
     @Override

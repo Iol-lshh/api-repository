@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import lshh.apirepository.dto.api.QueryParameterDto;
 
 @Accessors(chain=true,fluent=true)
 @Data
 public class QueryArgumentDto<T> {
     @JsonProperty
-    QueryParameterDto parameter;
+    int queryParameterId;
+    @JsonProperty
+    String queryParameterName;
     @JsonProperty
     T value;
 }

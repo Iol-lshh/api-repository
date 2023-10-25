@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @Data
 public class QueryViewDto {
     @JsonProperty
-    QueryDto queryDto;
+    QueryDto query;
     @JsonProperty
-    List<QueryParameterDto> queryParameterDtos;
+    List<QueryParameterDto> queryParameters;
 }

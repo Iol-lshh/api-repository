@@ -1,11 +1,10 @@
 package lshh.apirepository.orm.api.query;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +26,6 @@ public class QueryParameter extends RegistedInfo {
     String ioType;
     boolean isOptional;
 
-    @ManyToOne
-    @JoinColumn(name="query_id")
-    Query query;
+    @Column(name="query_id")
+    Integer queryId;
 }

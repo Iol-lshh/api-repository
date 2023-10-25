@@ -126,11 +126,11 @@ public class RouterServiceJpa implements RouterService {
 
         ResourcerDto resourcerDto = null;
         if(queryViewDto != null 
-            && queryViewDto.queryDto() != null 
-            && queryViewDto.queryDto().resourcerId() != null){
+            && queryViewDto.query() != null 
+            && queryViewDto.query().resourcerId() != null){
 
             resourcerDto = resourcerService
-                .find(queryViewDto.queryDto().resourcerId())
+                .find(queryViewDto.query().resourcerId())
                 .orElse(null);
         }
 

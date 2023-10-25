@@ -35,7 +35,4 @@ public class Query extends RegistedInfo {
 
     @Column(name = "resourcer_id")
     Integer resourcerId;
-
-    @OneToMany(mappedBy = "query", fetch = FetchType.EAGER)
-    Collection<QueryParameter> queryParameters;
 }

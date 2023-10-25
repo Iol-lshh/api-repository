@@ -101,8 +101,7 @@ public class PlainTextQueryManager implements QueryManager{
             MapSqlParameterSource parameters = new MapSqlParameterSource();
 
             for(Parameter p : this.params){
-                parameters.addValue(p.key.replace("@",""), p.val);
-                queryText = queryText.replace(p.key, p.key.replace("@", ":"));
+                parameters.addValue(p.key, p.val);
             }
             return parameters;
         }

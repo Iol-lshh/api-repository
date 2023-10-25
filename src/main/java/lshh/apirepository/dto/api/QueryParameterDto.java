@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import lshh.apirepository.common.dbhelper.QueryStatement.Parameter.IoType;
 
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Accessors(chain = true, fluent = true)
@@ -22,7 +21,7 @@ public class QueryParameterDto {
     @JsonProperty
     String description;
     @JsonProperty
-    IoType ioType;
+    String ioType;
     @JsonProperty
     boolean isOptional;
 
