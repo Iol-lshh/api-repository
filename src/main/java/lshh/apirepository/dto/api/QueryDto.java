@@ -1,6 +1,5 @@
 package lshh.apirepository.dto.api;
 
-import java.util.List;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

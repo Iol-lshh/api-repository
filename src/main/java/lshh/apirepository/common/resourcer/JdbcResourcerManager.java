@@ -24,12 +24,12 @@ public class JdbcResourcerManager implements ResourcerManager {
     JdbcResourcerFactory factory;
     Map<Integer, ResourcerContext> resourcerMap;
 
-    // todo 최초에, 디비로부터 가져와 생성
+    // 최초에, 디비로부터 가져와 생성
     public JdbcResourcerManager(@Autowired ResourcerService resourcerService) throws Exception{
         this.resourcerService = resourcerService;
         resourcerService.setResourcerManager(this);
         this.factory = new JdbcResourcerFactory();
-        this.resourcerMap = new HashMap();
+        this.resourcerMap = new HashMap<>();
         initMap();
     }
 
