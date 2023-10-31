@@ -1,6 +1,5 @@
-package lshh.apirepository.orm.api.query;
+package lshh.apirepository.orm.api.pipeline;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,17 +13,13 @@ import lshh.apirepository.orm.RegistedInfo;
 @Accessors(chain = true, fluent = true)
 @Setter
 @Getter
-@Table(name = "api_query")
+@Table(name = "api_pipeline_info")
 @Entity
-public class Query extends RegistedInfo {
+public class PipelineInfo  extends RegistedInfo{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     String name;
-    String contents;
     String description;
-
-    @Column(name = "resourcer_id")
-    Integer resourcerId;
 }

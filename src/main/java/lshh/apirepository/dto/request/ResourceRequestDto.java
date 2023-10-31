@@ -13,5 +13,5 @@ public class ResourceRequestDto {
     @JsonProperty
     String path;
     @JsonProperty
-    List<QueryArgumentDto> aruments;
+    List<QueryArgumentDto<Object>> aruments;
 }

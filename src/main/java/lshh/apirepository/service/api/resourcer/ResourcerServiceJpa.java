@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
 import lshh.apirepository.common.resourcer.ResourcerManager;
 import lshh.apirepository.dto.api.ResourcerDto;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfo;

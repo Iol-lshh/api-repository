@@ -29,6 +29,8 @@ public class QueryParameterDto {
     Integer queryId;
 
     LocalDateTime created;
+    @JsonProperty
     LocalDateTime deleted;
+    @JsonProperty
     boolean isEnabled;
 }

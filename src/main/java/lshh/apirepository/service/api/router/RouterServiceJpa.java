@@ -9,14 +9,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import lshh.apirepository.dto.api.PipelineViewDto;
 import lshh.apirepository.dto.api.QueryViewDto;
 import lshh.apirepository.dto.api.ResourcerDto;
 import lshh.apirepository.dto.api.RouterDto;
 import lshh.apirepository.dto.api.RouterViewDto;
+import lshh.apirepository.orm.api.pipeline.PipelineInfo;
+import lshh.apirepository.orm.api.pipeline.PipelineInfoRepository;
 import lshh.apirepository.orm.api.query.Query;
 import lshh.apirepository.orm.api.query.QueryRepository;
 import lshh.apirepository.orm.api.router.Router;
 import lshh.apirepository.orm.api.router.RouterRepository;
+import lshh.apirepository.service.api.pipeline.PipelineService;
 import lshh.apirepository.service.api.query.QueryService;
 import lshh.apirepository.service.api.resourcer.ResourcerService;
 
@@ -26,11 +30,11 @@ public class RouterServiceJpa implements RouterService {
     @Autowired
     RouterRepository routerRepository;
     @Autowired
-    QueryRepository queryRepository;
+    PipelineInfoRepository pipelineInfoRepository;
     @Autowired
     ResourcerService resourcerService;
     @Autowired
-    QueryService queryService;
+    PipelineService pipelineService;
 
     @Transactional
     public RouterDto toDto(Router entity){
@@ -39,7 +43,7 @@ public class RouterServiceJpa implements RouterService {
             .name(entity.name())
             .path(entity.path())
             .description(entity.description())
-            .queryId(entity.queryId())
+            .pipelineId(entity.pipelineId())
             .created(entity.getCreated())
             .deleted(entity.getDeleted())
             .isEnabled(entity.isEnabled());       
@@ -51,7 +55,7 @@ public class RouterServiceJpa implements RouterService {
             .name(dto.name())
             .path(dto.path())
             .description(dto.description())
-            .queryId(dto.queryId());
+            .pipelineId(dto.pipelineId());
         result.setCreated(dto.created());
         result.setDeleted(dto.deleted());
         result.setEnabled(dto.isEnabled());
@@ -73,16 +77,16 @@ public class RouterServiceJpa implements RouterService {
                 });
         }
 
-        Query query = null;
-        if(dto.queryId() != null){
-            query = queryRepository.findById(dto.queryId()).orElse(null);
+        PipelineInfo pipelineInfo = null;
+        if(dto.pipelineId() != null){
+            pipelineInfo = pipelineInfoRepository.findById(dto.pipelineId()).orElse(null);
         }
         
         router
             .name(dto.name()!=null?dto.name():router.name())
             .path(dto.path()!=null?dto.path():router.path())
             .description(dto.description()!=null?dto.description():router.description())
-            .queryId(query.id())
+            .pipelineId(pipelineInfo.id())
             .setEnabled(dto.isEnabled());
 
         if(dto.deleted()!=null){
@@ -119,25 +123,14 @@ public class RouterServiceJpa implements RouterService {
 
         RouterDto routerDto = find(id).orElse(null);
 
-        QueryViewDto queryViewDto = null;
+        PipelineViewDto pipelineViewDto = null;
         if(routerDto != null){
-            queryViewDto = queryService.findView(routerDto.id());
-        }
-
-        ResourcerDto resourcerDto = null;
-        if(queryViewDto != null 
-            && queryViewDto.query() != null 
-            && queryViewDto.query().resourcerId() != null){
-
-            resourcerDto = resourcerService
-                .find(queryViewDto.query().resourcerId())
-                .orElse(null);
+            pipelineViewDto = pipelineService.findView(routerDto.id());
         }
 
         return new RouterViewDto()
             .router(routerDto)
-            .queryView(queryViewDto)
-            .resourcer(resourcerDto);
+            .pipeline(pipelineViewDto);
     }
 
     @Override

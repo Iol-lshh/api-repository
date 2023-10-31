@@ -9,5 +9,5 @@ import lombok.experimental.Accessors;
 @Data
 public class QueryRequestDto {
     String query;
-    List<QueryArgumentDto> arguments;    
+    List<QueryArgumentDto<Object>> arguments;    
 }

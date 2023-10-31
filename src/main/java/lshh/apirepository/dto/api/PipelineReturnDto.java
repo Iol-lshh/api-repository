@@ -1,10 +1,10 @@
 package lshh.apirepository.dto.api;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-
-import java.util.List;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -12,11 +12,21 @@ import lombok.experimental.Accessors;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Accessors(chain = true, fluent = true)
 @Data
-public class QueryViewDto {
+public class PipelineReturnDto {
     @JsonProperty
-    QueryDto query;
+    Integer id;
+
     @JsonProperty
-    List<QueryParameterDto> queryParameters;
+    String name;
     @JsonProperty
-    ResourcerDto resourcer;
+    String description;
+
+    @JsonProperty
+    Integer piplineId;
+
+    LocalDateTime created;
+    @JsonProperty
+    LocalDateTime deleted;
+    @JsonProperty
+    boolean isEnabled;
 }

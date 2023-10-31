@@ -1,0 +1,96 @@
+# test
+
+1. resourcer
+2. query
+3. 
+
+
+ 
+## resourcer
+```json
+{
+  "name": "test by psql",
+  "path": "//172.30.1.9:5432/api_repository",
+  "description": "test by psql",
+  "access_name": "lshh",
+  "key": "lshh.com",
+  "driver": "postgresql",
+  "driver_class_name": "org.postgresql.Driver",
+  "enabled": true
+}
+
+{
+  "name": "test by psql",
+  "path": "//172.30.1.9:5432/api_repository2",
+  "description": "test by psql",
+  "access_name": "lshh",
+  "key": "lshh.com",
+  "driver": "postgresql",
+  "driver_class_name": "org.postgresql.Driver",
+  "enabled": true
+}
+````
+
+
+## query
+```json
+{
+  "name": "for_test",
+  "contents": "select * from for_test",
+  "description": "for simple test",
+  "resourcer_id": 2,
+  "enabled": true
+}
+```
+
+## pipeline
+```json
+{
+  "name": "for_test",
+  "description": "simple test pipeline",
+  "enabled": true
+}
+```
+
+## pipeline_step
+```json
+{
+  "process_type": "Process",
+  "resourcer_type": "DB",
+  "name": "for_test1",
+  "description": "for simple test1",
+  "pipeline_id": 1,
+  "query_id": 1,
+  "enabled": true
+}
+```
+## pipeline_return
+```json
+{
+  "name": "name",
+  "description": "for test",
+  "pipline_id": 1,
+  "is_enabled": true
+}
+```
+
+## router
+```json
+{
+  "name": "for_test",
+  "path": "/api2/for_test",
+  "description": "simple test",
+  "pipeline_id": 1,
+  "is_enabled": true
+}
+```
+
+### test
+```json
+{
+  "path": "/api2/for_test",
+  "aruments": [
+    
+  ]
+}
+```

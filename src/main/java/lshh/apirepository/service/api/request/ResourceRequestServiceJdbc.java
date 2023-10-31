@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import lshh.apirepository.common.resourcer.JdbcResourcerContext;
-import lshh.apirepository.common.resourcer.JdbcResourcerManager;
-import lshh.apirepository.common.resourcer.ResourcerContext;
+import lshh.apirepository.common.pipeline.PipelineContext;
+import lshh.apirepository.common.pipeline.PipelineManager;
 import lshh.apirepository.dto.request.QueryArgumentDto;
-import lshh.apirepository.dto.request.QueryRequestDto;
 import lshh.apirepository.dto.request.ResourceRequestDto;
-import lshh.apirepository.orm.api.query.Query;
+import lshh.apirepository.orm.api.pipeline.PipelineInfo;
+import lshh.apirepository.orm.api.pipeline.PipelineInfoRepository;
+import lshh.apirepository.orm.api.pipeline.PipelineStepInfoRepository;
 import lshh.apirepository.orm.api.query.QueryRepository;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfoRepository;
 import lshh.apirepository.orm.api.router.Router;
@@ -23,18 +23,23 @@ import lshh.apirepository.orm.api.router.RouterRepository;
 public class ResourceRequestServiceJdbc implements ResourceRequestService{
 
     @Autowired
-    JdbcResourcerManager manager;
-    @Autowired
     RouterRepository routerRepository;
     @Autowired
     QueryRepository queryRepository;
     @Autowired
     ResourcerInfoRepository resourcerInfoRepository;
+    @Autowired
+    PipelineInfoRepository pipelineInfoRepository;
+    @Autowired
+    PipelineStepInfoRepository pipelineStepInfoRepository;
+
+    @Autowired
+    PipelineManager pipelineManager;
 
     @Override
     public Optional<Object> getByPath(String path) throws Exception {
         
-        List<QueryArgumentDto> argumentDtos = List.of();
+        List<QueryArgumentDto<Object>> argumentDtos = List.of();
         return get(new ResourceRequestDto()
             .path(path)
             .aruments(argumentDtos));
@@ -47,30 +52,13 @@ public class ResourceRequestServiceJdbc implements ResourceRequestService{
         Router router = routerRepository.findByPath(dto.path())
             .orElseThrow(()->new Exception("제공하지 않는 경로"));
 
-        Query query = queryRepository.findById(router.queryId())
-            .orElseThrow(()->new Exception("제공하지 않는 쿼리"));
+        PipelineInfo pipelineInfo = pipelineInfoRepository.findById(router.pipelineId())
+            .orElseThrow(()->new Exception("제공하지 않는 파이프라인"));
 
-        if(query.resourcerId() == null){
-            throw new Exception("제공하지 않는 리소서");
-        }
-        ResourcerContext resourcerContext = manager.getResourcer(query.resourcerId());
+        PipelineContext pipeline = pipelineManager.createContext(pipelineInfo.id(), dto.aruments());
+        pipeline.process();
 
-        switch(resourcerContext.type()){
-            case DB:
-                QueryRequestDto requestDto = new QueryRequestDto()
-                    .query(query.contents())
-                    .arguments(dto.aruments());
-                    
-                return Optional.of(((JdbcResourcerContext) resourcerContext).getResource(requestDto));
-            
-            case API:
-                // todo - sub api (next version)
-                return Optional.empty();
-
-            default:
-                return Optional.empty();
-        }
-        
+        return Optional.of(pipeline.result());
     }
     
 }

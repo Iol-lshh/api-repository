@@ -16,5 +16,5 @@ public class RouterViewDto {
     @JsonProperty
     ResourcerDto resourcer;
     @JsonProperty
-    QueryViewDto queryView;
+    PipelineViewDto pipeline;
 }

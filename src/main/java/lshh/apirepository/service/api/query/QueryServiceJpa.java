@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.dto.api.QueryParameterDto;
 import lshh.apirepository.dto.api.QueryViewDto;
+import lshh.apirepository.dto.api.ResourcerDto;
 import lshh.apirepository.orm.api.query.Query;
 import lshh.apirepository.orm.api.query.QueryParameter;
 import lshh.apirepository.orm.api.query.QueryRepository;
@@ -18,6 +19,7 @@ import lshh.apirepository.orm.api.resourcer.ResourcerInfo;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfoRepository;
 import lshh.apirepository.orm.api.router.Router;
 import lshh.apirepository.orm.api.router.RouterRepository;
+import lshh.apirepository.service.api.resourcer.ResourcerService;
 
 @Service
 public class QueryServiceJpa implements QueryService{
@@ -31,6 +33,8 @@ public class QueryServiceJpa implements QueryService{
     RouterRepository routerRepository;
     @Autowired
     QueryParameterServiceJpa queryParameterService;
+    @Autowired
+    ResourcerService resourcerService;
 
     public QueryDto toDto(Query entity){
         return new QueryDto()
@@ -69,17 +73,6 @@ public class QueryServiceJpa implements QueryService{
     }
 
     @Override
-    public Optional<QueryDto> findByRouter(int routerId) {
-
-        Optional<Router> maybeRouter = routerRepository.findById(routerId);
-        if(maybeRouter.isEmpty()){
-            return Optional.empty();
-        }
-        return queryRepository.findById(maybeRouter.get().queryId())
-            .map(this::toDto);
-    }
-
-    @Override
     public Optional<QueryDto> find(int id) {
         return queryRepository.findById(id).map(this::toDto);
     }
@@ -92,11 +85,13 @@ public class QueryServiceJpa implements QueryService{
         if(queryDto.id() ==null){
             return new QueryViewDto();
         }
+        ResourcerDto resourcerDto = resourcerService.find(queryDto.resourcerId()).orElse(null);
 
         List<QueryParameterDto> parameterDtos = queryParameterService.findList(queryDto.id());
         return new QueryViewDto()
             .query(queryDto)
-            .queryParameters(parameterDtos);
+            .queryParameters(parameterDtos)
+            .resourcer(resourcerDto);
     }
     
     @Override

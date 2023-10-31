@@ -27,6 +27,8 @@ public class QueryDto {
     Integer resourcerId;
 
     LocalDateTime created;
+    @JsonProperty
     LocalDateTime deleted;
+    @JsonProperty
     boolean isEnabled;
 }

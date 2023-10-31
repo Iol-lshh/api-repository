@@ -24,9 +24,11 @@ public class RouterDto {
     String description;
     
     @JsonProperty
-    Integer queryId;
+    Integer pipelineId;
 
     LocalDateTime created;
+    @JsonProperty
     LocalDateTime deleted;
+    @JsonProperty
     boolean isEnabled;
 }
