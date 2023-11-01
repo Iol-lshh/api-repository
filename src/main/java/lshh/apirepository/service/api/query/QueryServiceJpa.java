@@ -8,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lshh.apirepository.dto.api.QueryDto;
-import lshh.apirepository.dto.api.QueryParameterDto;
-import lshh.apirepository.dto.api.QueryViewDto;
-import lshh.apirepository.dto.api.ResourcerDto;
 import lshh.apirepository.orm.api.query.Query;
 import lshh.apirepository.orm.api.query.QueryRepository;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfo;
@@ -28,8 +25,6 @@ public class QueryServiceJpa implements QueryService{
     ResourcerInfoRepository resourcerInfoRepository;
     @Autowired
     RouterRepository routerRepository;
-    @Autowired
-    QueryParameterServiceJpa queryParameterService;
     @Autowired
     ResourcerService resourcerService;
 
@@ -72,23 +67,6 @@ public class QueryServiceJpa implements QueryService{
     @Override
     public Optional<QueryDto> find(int id) {
         return queryRepository.findById(id).map(this::toDto);
-    }
-
-    @Override
-    public QueryViewDto findView(int id) throws Exception{
-        Optional<Query> maybeQuery = queryRepository.findById(id);
-        QueryDto queryDto = maybeQuery.map(this::toDto).orElseThrow(()->new Exception("no Query"));
- 
-        if(queryDto.id() ==null){
-            return new QueryViewDto();
-        }
-        ResourcerDto resourcerDto = resourcerService.find(queryDto.resourcerId()).orElse(null);
-
-        List<QueryParameterDto> parameterDtos = queryParameterService.findList(queryDto.id());
-        return new QueryViewDto()
-            .query(queryDto)
-            .queryParameters(parameterDtos)
-            .resourcer(resourcerDto);
     }
     
     @Override

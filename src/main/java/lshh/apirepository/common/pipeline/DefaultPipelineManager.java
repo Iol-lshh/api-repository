@@ -10,7 +10,6 @@ import lshh.apirepository.common.resourcer.ResourcerManager;
 import lshh.apirepository.dto.api.PipelineStepDto;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.dto.request.QueryArgumentDto;
-import lshh.apirepository.orm.api.pipeline.PipelineReturnRepository;
 import lshh.apirepository.service.api.pipeline.PipelineStepService;
 import lshh.apirepository.service.api.pipeline.PipelineService;
 import lshh.apirepository.service.api.query.QueryService;
@@ -27,8 +26,6 @@ public class DefaultPipelineManager implements PipelineManager{
     PipelineService pipelineService;
     @Autowired
     PipelineStepService pipelineStepService;
-    @Autowired
-    PipelineReturnRepository pipelineReturnRepository;
     @Autowired
     QueryService queryService;
 
@@ -73,14 +70,10 @@ public class DefaultPipelineManager implements PipelineManager{
                 rollbackList.add(step);
             }
 
-            List<String> returnList = pipelineReturnRepository.findByPipelineId(pipelineId)
-                .stream().map(e->e.name()).toList();
-
             return new DefaultPipelineContext(queryService)
                 .arguments(arguments)
                 .processList(processList)
-                .rollbackList(rollbackList)
-                .returnList(returnList);
+                .rollbackList(rollbackList);
 
         }
 

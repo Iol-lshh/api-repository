@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import lshh.apirepository.common.pipeline.PipelineStep.ProcessType;
 import lshh.apirepository.dto.api.PipelineDto;
-import lshh.apirepository.dto.api.PipelineReturnDto;
 import lshh.apirepository.dto.api.PipelineStepDto;
 import lshh.apirepository.dto.api.PipelineViewDto;
 import lshh.apirepository.orm.api.pipeline.PipelineInfo;
@@ -23,8 +22,6 @@ public class PipelineServiceJpa implements PipelineService {
     PipelineInfoRepository pipelineInfoRepository;
     @Autowired
     PipelineStepService pipelineStepService;
-    @Autowired
-    PipelineReturnService pipelineReturnService;
 
     public PipelineDto toDto(PipelineInfo entity) {
         return new PipelineDto()
@@ -94,12 +91,10 @@ public class PipelineServiceJpa implements PipelineService {
         PipelineDto pipeline = find(id).orElse(null);
         List<PipelineStepDto> processSteps = pipelineStepService.findList(id, ProcessType.Process);
         List<PipelineStepDto> rollbackSteps = pipelineStepService.findList(id, ProcessType.Rollback);
-        List<PipelineReturnDto> returnList = pipelineReturnService.findList(id);
         return new PipelineViewDto()
             .pipeline(pipeline)
             .processSteps(processSteps)
-            .rollbackSteps(rollbackSteps)
-            .returnList(returnList);
+            .rollbackSteps(rollbackSteps);
     }
     
 }

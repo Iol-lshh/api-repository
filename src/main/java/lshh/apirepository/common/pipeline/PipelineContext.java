@@ -5,7 +5,6 @@ import lshh.apirepository.dto.request.QueryArgumentDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
 
 import java.util.List;
-import java.util.Map;
 
 public interface PipelineContext {
 
@@ -17,13 +16,8 @@ public interface PipelineContext {
     }
     Status act(ProcessType processType);
 
-    Map<String,Object> result();
-
-    List<String> returnList();
-    PipelineContext returnList(List<String> resuList);
-
-    PipelineContext arguments(Map<String, Object> args);
     PipelineContext arguments(List<QueryArgumentDto<Object>> arguments);
+    List<Object> returnList();
 
     List<PipelineStep> processList();
     PipelineContext processList(List<PipelineStep> list);

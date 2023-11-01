@@ -11,7 +11,7 @@ import lshh.apirepository.common.pipeline.PipelineStep.ProcessType;
 import lshh.apirepository.common.pipeline.PipelineStep.ResourcerType;
 import lshh.apirepository.dto.api.PipelineStepDto;
 import lshh.apirepository.dto.api.PipelineStepViewDto;
-import lshh.apirepository.dto.api.QueryViewDto;
+import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.orm.api.pipeline.PipelineStepInfo;
 import lshh.apirepository.orm.api.pipeline.PipelineStepInfoRepository;
 import lshh.apirepository.service.api.query.QueryService;
@@ -110,13 +110,13 @@ public class PipelineStepServiceJpa implements PipelineStepService {
     public PipelineStepViewDto findView(int pipelineStepId) throws Exception {
         
         PipelineStepDto pipelineStepDto = pipelineStepInfoRepository.findById(pipelineStepId).map(this::toDto).orElse(null);
-        QueryViewDto queryViewDto = null;
+        QueryDto queryDto = null;
         if(pipelineStepDto != null && pipelineStepDto.queryId() != null){
-            queryViewDto = queryService.findView(pipelineStepDto.queryId());
+            queryDto = queryService.find(pipelineStepDto.queryId()).orElse(null);
         }
         return new PipelineStepViewDto()
             .pipelineStep(pipelineStepDto)
-            .queryView(queryViewDto);
+            .query(queryDto);
     }
     
 }

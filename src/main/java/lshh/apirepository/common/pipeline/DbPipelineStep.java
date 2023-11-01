@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import lshh.apirepository.dto.api.PipelineStepParameterDto;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.dto.request.QueryArgumentDto;
 import lshh.apirepository.dto.request.QueryMsgDto;
@@ -25,7 +26,9 @@ public class DbPipelineStep implements PipelineStep{
     ProcessType processType;
     
     QueryDto queryDto;
-    List<QueryArgumentDto<Object>> argumentDtos;
+    List<PipelineStepParameterDto> inputParameters;
+    List<PipelineStepParameterDto> outputParameters;
+    List<QueryArgumentDto<Object>> arguments;
 
     Status status = Status.WAIT;
     List<Map <String, Object>> result;
@@ -42,28 +45,17 @@ public class DbPipelineStep implements PipelineStep{
     }
 
     @Override
-    public List<QueryArgumentDto<Object>> arguments(){
-        return this.argumentDtos;
-    }
-
-    @Override
-    public DbPipelineStep arguments(List<QueryArgumentDto<Object>> dtos){
-        this.argumentDtos = dtos;
-        return this;
-    }
-
-    @Override
     public Status act() throws PipelineProcessFailException{
         QueryMsgDto requestDto = new QueryMsgDto()
             .query(this.queryDto.contents())
-            .arguments(this.argumentDtos);
+            .arguments(this.arguments);
 
         try{
             this.result = resourcer.getResource(requestDto);
             
-        }catch(Exception e){
+        }catch(Exception err){
             this.status = Status.FAIL;
-            throw new PipelineProcessFailException(e.getMessage());
+            throw new PipelineProcessFailException(err.getMessage());
         }
         return Status.OK;
     }

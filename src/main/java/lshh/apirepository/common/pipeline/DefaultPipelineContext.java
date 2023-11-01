@@ -6,25 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 import lshh.apirepository.common.pipeline.PipelineStep.ProcessType;
-import lshh.apirepository.dto.api.QueryParameterDto;
 import lshh.apirepository.dto.request.QueryArgumentDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
 import lshh.apirepository.service.api.query.QueryService;
 
 public class DefaultPipelineContext implements PipelineContext {
 
-
     List<PipelineStep> processList;
     List<PipelineStep> rollbackList;
 
     Map<String, Object> argumentPool;
-    List<String> returnList;
+    List<Object> returnList;
 
     QueryService queryService;
 
     public DefaultPipelineContext(QueryService queryService){
         this.queryService = queryService;
-        this.returnList = new ArrayList<String>();
+        this.returnList = new ArrayList<Object>();
         this.argumentPool = new HashMap<>();
     }
 
@@ -39,29 +37,38 @@ public class DefaultPipelineContext implements PipelineContext {
                 actList = this.processList;
                 break;
         }
-
         try{
-            for(PipelineStep context: actList){
+            for(PipelineStep  step: actList){
                 // 받은 결과값을 다시 요청
-                // 1. pipelineStep이 가진 query의 parameter와 같은 이름의 argument를 pool에서 가져온다
-                List<QueryParameterDto> params = queryService
-                    .findView(context.query().id())
-                    .queryParameters();
-
-                List<QueryArgumentDto<Object>> args = params.stream().map(e->{
+                // 1. pipelineStep이 가진 inputParameters와 같은 이름의 argument들을 argumentPool에서 가져온다
+                List<QueryArgumentDto<Object>> args = step.inputParameters().stream().map(e->{
+                    // alias 우선
+                    String findAlias = e.alias() !=null ? e.alias() : e.name();
                     return new QueryArgumentDto<>()
-                        .queryParameterId(e.id())
-                        .queryParameterName(e.name())
-                        .value(argumentPool.get(e.name()));
+                        .parameterId(e.id())
+                        .name(findAlias)
+                        .value(argumentPool.get(findAlias));
                 }).toList();
                 
-                if(context.arguments(args).act() == Status.OK){
-                    System.out.println("리소서 요청 결과: "+context.result());
-                    // 2. 결과값을 argument pool map 에 넣는다. (덮어쓰기)
-                    context.result().stream().forEach(e->argumentPool.putAll(e));
+                if(step.arguments(args).act() == Status.OK){
+                    // 2. 결과 넣는다.
+                    System.out.println("리소서 요청 결과: "+step.result());
+                    returnList.add(step.result());
                     
+                    // 3. pipelineStep이 가진 outputParameters와 같은 이름의 argument를 argument pool map 에 넣는다. (덮어쓰기)
+                    List<String> outputNames = step.outputParameters()
+                        .stream()
+                        .map(e -> e.alias() !=null ? e.alias() : e.name())
+                        .toList();
+                    
+                    step.result().forEach(
+                        e0 -> e0.entrySet()
+                            .stream()
+                            .filter(e1 -> outputNames.contains(e1.getKey()))
+                            .forEach(e2 -> argumentPool.put(e2.getKey(), e2.getValue()))
+                    );
                 }else{
-                    throw new PipelineProcessFailException("fail: "+ context.query().id());
+                    throw new PipelineProcessFailException("FAIL: "+ step.query().id());
                 }
             }
         }catch(Exception e){
@@ -71,14 +78,8 @@ public class DefaultPipelineContext implements PipelineContext {
     }
 
     @Override
-    public PipelineContext arguments(Map<String, Object> args){
-        this.argumentPool.putAll(args);
-        return this;
-    }
-
-    @Override
     public PipelineContext arguments(List<QueryArgumentDto<Object>> arguments) {
-        arguments.stream().forEach(e->this.argumentPool.put(e.queryParameterName(), e.value()));
+        arguments.stream().forEach(e->this.argumentPool.put(e.name(), e.value()));
         return this;
     }
 
@@ -141,23 +142,8 @@ public class DefaultPipelineContext implements PipelineContext {
     }
 
     @Override
-    public PipelineContext returnList(List<String> resuList){
-        this.returnList = resuList;
-        return this;
-    }
-
-    @Override
-    public List<String> returnList(){
+    public List<Object> returnList(){
         return this.returnList;
-    }
-
-    @Override
-    public Map<String,Object> result(){
-
-        Map<String, Object> result = new HashMap<>();
-        this.returnList.forEach(s -> result.put(s, this.argumentPool.get(s)));
-        
-        return result;
     }
     
 }

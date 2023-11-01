@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.QueryDto;
-import lshh.apirepository.dto.api.QueryViewDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
-import lshh.apirepository.service.api.query.QueryParameterService;
 import lshh.apirepository.service.api.query.QueryService;
 
 @RequestMapping("/query")
@@ -22,9 +20,6 @@ import lshh.apirepository.service.api.query.QueryService;
 public class QueryController {
     @Autowired
     QueryService queryService;
-
-    @Autowired
-    QueryParameterService queryParameterService;
 
     @GetMapping("/list/{resourcerId}")
     public List<QueryDto> findList(@PathVariable("resourcerId") int resourcerId){
@@ -35,11 +30,6 @@ public class QueryController {
     public QueryDto find(@PathVariable int queryId){
         return queryService.find(queryId)
             .orElse(null);
-    }
-
-    @GetMapping("/view/{queryId}")
-    public QueryViewDto findView(@PathVariable int queryId) throws Exception{
-        return queryService.findView(queryId);
     }
 
     @PostMapping("")

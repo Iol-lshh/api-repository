@@ -1,5 +1,6 @@
 package lshh.apirepository.common.pipeline;
 
+import lshh.apirepository.dto.api.PipelineStepParameterDto;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.dto.request.QueryArgumentDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
@@ -19,6 +20,10 @@ public interface PipelineStep {
 
     PipelineStep query(QueryDto queryDto);
     QueryDto query();
+    List<PipelineStepParameterDto> inputParameters();
+    PipelineStep inputParameters(List<PipelineStepParameterDto> inputs);
+    List<PipelineStepParameterDto> outputParameters();
+    PipelineStep outputParameters(List<PipelineStepParameterDto> outputs);
     PipelineStep arguments(List<QueryArgumentDto<Object>> dtos);
     List<QueryArgumentDto<Object>> arguments();
 

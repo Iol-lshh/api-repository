@@ -9,12 +9,9 @@ import lombok.experimental.Accessors;
 @Data
 public class QueryArgumentDto<T> {
     @JsonProperty
-    int queryParameterId;
-    @JsonProperty
-    String queryParameterName;
+    String name;    //쿼리에 쓰인 이름
     @JsonProperty
     T value;
-    
     @JsonProperty
-    String aliasForArg;
+    Integer parameterId; //실제 데이터 아이디
 }

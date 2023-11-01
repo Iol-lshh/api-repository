@@ -58,7 +58,7 @@ public class ResourceRequestServiceJdbc implements ResourceRequestService{
         PipelineContext pipeline = pipelineManager.createContext(pipelineInfo.id(), dto.aruments());
         pipeline.process();
 
-        return Optional.of(pipeline.result());
+        return Optional.of(pipeline.returnList());
     }
     
 }

@@ -16,5 +16,5 @@ public class PipelineStepViewDto {
     PipelineStepDto pipelineStep;
 
     @JsonProperty
-    QueryViewDto queryView;
+    QueryDto query;
 }
