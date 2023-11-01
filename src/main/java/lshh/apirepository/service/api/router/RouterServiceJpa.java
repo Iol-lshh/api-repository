@@ -10,18 +10,13 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.PipelineViewDto;
-import lshh.apirepository.dto.api.QueryViewDto;
-import lshh.apirepository.dto.api.ResourcerDto;
 import lshh.apirepository.dto.api.RouterDto;
 import lshh.apirepository.dto.api.RouterViewDto;
 import lshh.apirepository.orm.api.pipeline.PipelineInfo;
 import lshh.apirepository.orm.api.pipeline.PipelineInfoRepository;
-import lshh.apirepository.orm.api.query.Query;
-import lshh.apirepository.orm.api.query.QueryRepository;
 import lshh.apirepository.orm.api.router.Router;
 import lshh.apirepository.orm.api.router.RouterRepository;
 import lshh.apirepository.service.api.pipeline.PipelineService;
-import lshh.apirepository.service.api.query.QueryService;
 import lshh.apirepository.service.api.resourcer.ResourcerService;
 
 @Service

@@ -70,10 +70,7 @@ public class JdbcResourcerManager implements ResourcerManager {
     // # 가져오기
     @Override
     public ResourcerContext getResourcer(int id) throws Exception {
-        if(!this.factory.existsResourcer(id)){
-            throw new Exception("제공하지 않는 리소서");
-        }
-
+        
         ResourcerContext resourcer = this.resourcerMap.get(id);
         if(resourcer == null){
             ResourcerDto dto = resourcerService.find(id).orElseThrow(()->new Exception("제공하지 않는 리소서"));

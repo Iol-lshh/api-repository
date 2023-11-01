@@ -3,7 +3,6 @@ package lshh.apirepository.common.pipeline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import lshh.apirepository.common.dbhelper.QueryManager;
 import lshh.apirepository.common.pipeline.PipelineStep.ProcessType;
 import lshh.apirepository.common.pipeline.PipelineStep.ResourcerType;
 import lshh.apirepository.common.resourcer.ResourcerContext;

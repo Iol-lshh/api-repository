@@ -26,12 +26,12 @@ public interface PipelineContext {
     PipelineContext arguments(List<QueryArgumentDto<Object>> arguments);
 
     List<PipelineStep> processList();
-    PipelineContext addProcessStep(PipelineStep step);
     PipelineContext processList(List<PipelineStep> list);
+    PipelineContext addProcessStep(PipelineStep step);
 
     List<PipelineStep> rollbackList();
-    PipelineContext addRollbackStep(PipelineStep step);
     PipelineContext rollbackList(List<PipelineStep> list);
+    PipelineContext addRollbackStep(PipelineStep step);
 
     PipelineContext clear();
     PipelineContext clearArgumentPool();

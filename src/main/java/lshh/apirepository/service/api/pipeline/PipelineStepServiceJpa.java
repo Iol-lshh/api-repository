@@ -7,14 +7,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lshh.apirepository.common.pipeline.PipelineStep;
 import lshh.apirepository.common.pipeline.PipelineStep.ProcessType;
 import lshh.apirepository.common.pipeline.PipelineStep.ResourcerType;
-import lshh.apirepository.dto.api.PipelineDto;
 import lshh.apirepository.dto.api.PipelineStepDto;
 import lshh.apirepository.dto.api.PipelineStepViewDto;
 import lshh.apirepository.dto.api.QueryViewDto;
-import lshh.apirepository.orm.api.pipeline.PipelineInfo;
 import lshh.apirepository.orm.api.pipeline.PipelineStepInfo;
 import lshh.apirepository.orm.api.pipeline.PipelineStepInfoRepository;
 import lshh.apirepository.service.api.query.QueryService;
