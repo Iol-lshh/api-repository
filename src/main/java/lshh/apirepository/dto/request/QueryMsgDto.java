@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 
 @Accessors(chain = true, fluent = true)
 @Data
-public class QueryRequestDto {
+public class QueryMsgDto {
     String query;
     List<QueryArgumentDto<Object>> arguments;    
 }

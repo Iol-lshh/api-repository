@@ -13,7 +13,7 @@ import lshh.apirepository.common.dbhelper.PlainTextQueryManager;
 import lshh.apirepository.common.dbhelper.QueryManager;
 import lshh.apirepository.common.dbhelper.QueryStatement;
 import lshh.apirepository.dto.request.QueryArgumentDto;
-import lshh.apirepository.dto.request.QueryRequestDto;
+import lshh.apirepository.dto.request.QueryMsgDto;
 
 @Accessors(fluent = true)
 @Getter
@@ -38,7 +38,7 @@ public class JdbcResourcerContext implements ResourcerContext{
         this.queryManager = new PlainTextQueryManager(dataSource);
     }
 
-    public List<Map<String, Object>> getResource(QueryRequestDto dto) throws Exception {
+    public List<Map<String, Object>> getResource(QueryMsgDto dto) throws Exception {
         
         QueryStatement statement = queryManager.createStatement()
             .setQuery(dto.query());
@@ -49,7 +49,7 @@ public class JdbcResourcerContext implements ResourcerContext{
         return statement.query();
     }
 
-    public <T> List<T> getResource(QueryRequestDto dto, Class<T> requiredType) throws Exception {
+    public <T> List<T> getResource(QueryMsgDto dto, Class<T> requiredType) throws Exception {
         
         QueryStatement statement = queryManager.createStatement()
             .setQuery(dto.query());

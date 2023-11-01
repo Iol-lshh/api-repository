@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.dto.request.QueryArgumentDto;
-import lshh.apirepository.dto.request.QueryRequestDto;
+import lshh.apirepository.dto.request.QueryMsgDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
 import lshh.apirepository.common.resourcer.ResourcerContext;
 
@@ -54,7 +54,7 @@ public class DbPipelineStep implements PipelineStep{
 
     @Override
     public Status act() throws PipelineProcessFailException{
-        QueryRequestDto requestDto = new QueryRequestDto()
+        QueryMsgDto requestDto = new QueryMsgDto()
             .query(this.queryDto.contents())
             .arguments(this.argumentDtos);
 
