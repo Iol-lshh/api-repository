@@ -26,6 +26,9 @@ public class QueryParameterDto {
     boolean isOptional;
 
     @JsonProperty
+    String aliasForArg;
+
+    @JsonProperty
     Integer queryId;
 
     LocalDateTime created;

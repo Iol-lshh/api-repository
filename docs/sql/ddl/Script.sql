@@ -18,6 +18,7 @@ create table api_query_parameter(
 	io_type varchar(8),
 	is_optional bool,
 	query_id int,
+	alias varchar(20),
 	created TIMESTAMPTZ,
 	deleted TIMESTAMPTZ,
 	is_enabled bool

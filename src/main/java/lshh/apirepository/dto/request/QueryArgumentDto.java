@@ -14,4 +14,7 @@ public class QueryArgumentDto<T> {
     String queryParameterName;
     @JsonProperty
     T value;
+    
+    @JsonProperty
+    String aliasForArg;
 }

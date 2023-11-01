@@ -28,6 +28,7 @@ public class QueryParameterServiceJpa implements QueryParameterService{
             .description(entity.description())
             .ioType(entity.ioType())
             .isOptional(entity.isOptional())
+            .aliasForArg(entity.aliasForArg())
             .queryId(entity.queryId())
             .created(entity.getCreated())
             .deleted(entity.getDeleted())
@@ -41,6 +42,7 @@ public class QueryParameterServiceJpa implements QueryParameterService{
             .description(dto.description())
             .ioType(dto.ioType())
             .isOptional(dto.isOptional())
+            .aliasForArg(dto.aliasForArg())
             .queryId(dto.queryId());
         result.setCreated(dto.created());
         result.setDeleted(dto.deleted());
@@ -54,19 +56,32 @@ public class QueryParameterServiceJpa implements QueryParameterService{
         QueryParameter entity;
         
         if(dto.id()==null){
-            dto.created(LocalDateTime.now());
-            entity = toEntity(dto);
+            entity = new QueryParameter();
+            entity.setCreated(LocalDateTime.now());
         }else{
             entity = queryParameterRepository.findById(dto.id())
                 .orElseGet(()->{
-                    dto.created(LocalDateTime.now());
-                    return toEntity(dto);
+                    QueryParameter _entity = new QueryParameter();
+                    _entity.setCreated(LocalDateTime.now());
+                    return _entity;
                 });
         }
 
         Query query = queryRepository.findById(dto.queryId())
             .orElseThrow(()->new Exception("잘못된 query"));
         entity.queryId(query.id());
+
+        entity
+            .name(dto.name()!=null?dto.name():entity.name())
+            .description(dto.description()!=null?dto.description():entity.description())
+            .ioType(dto.ioType()!=null?dto.ioType():entity.ioType())
+            .isOptional(dto.isOptional())
+            .aliasForArg(dto.aliasForArg()!=null?dto.aliasForArg():entity.aliasForArg())
+            .setEnabled(dto.isEnabled());
+        
+        if(dto.deleted()!=null){
+            entity.setDeleted(dto.deleted());
+        }
 
         queryParameterRepository.save(entity);
         return Status.OK;

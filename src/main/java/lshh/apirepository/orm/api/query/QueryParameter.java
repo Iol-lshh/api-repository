@@ -25,6 +25,8 @@ public class QueryParameter extends RegistedInfo {
     String description;
     String ioType;
     boolean isOptional;
+    @Column(name="alias")
+    String aliasForArg;
 
     @Column(name="query_id")
     Integer queryId;

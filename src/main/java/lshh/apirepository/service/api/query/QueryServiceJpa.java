@@ -7,17 +7,14 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.dto.api.QueryParameterDto;
 import lshh.apirepository.dto.api.QueryViewDto;
 import lshh.apirepository.dto.api.ResourcerDto;
 import lshh.apirepository.orm.api.query.Query;
-import lshh.apirepository.orm.api.query.QueryParameter;
 import lshh.apirepository.orm.api.query.QueryRepository;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfo;
 import lshh.apirepository.orm.api.resourcer.ResourcerInfoRepository;
-import lshh.apirepository.orm.api.router.Router;
 import lshh.apirepository.orm.api.router.RouterRepository;
 import lshh.apirepository.service.api.resourcer.ResourcerService;
 
@@ -96,34 +93,35 @@ public class QueryServiceJpa implements QueryService{
     
     @Override
     public Status save(QueryDto dto) throws Exception {
-        Query query;
+        Query entity;
 
         if(dto.id()==null){
-            dto.created(LocalDateTime.now());
-            query = toEntity(dto);
+            entity = new Query();
+            entity.setCreated(LocalDateTime.now());
         }else{
-            query = queryRepository.findById(dto.id())
+            entity = queryRepository.findById(dto.id())
                 .orElseGet(()->{
-                    dto.created(LocalDateTime.now());
-                    return toEntity(dto);
+                    Query _entity = new Query();
+                    _entity.setCreated(LocalDateTime.now());
+                    return _entity;
                 });
         }
         
-        query
-            .name(dto.name()!=null?dto.name():query.name())
-            .contents(dto.contents()!=null?dto.contents():query.contents())
-            .description(dto.description()!=null?dto.description():query.description())
+        entity
+            .name(dto.name()!=null?dto.name():entity.name())
+            .contents(dto.contents()!=null?dto.contents():entity.contents())
+            .description(dto.description()!=null?dto.description():entity.description())
             .setEnabled(dto.isEnabled());
 
         if(dto.deleted()!=null){
-            query.setDeleted(dto.deleted());
+            entity.setDeleted(dto.deleted());
         }
 
         ResourcerInfo resourcer = resourcerInfoRepository.findById(dto.resourcerId())
             .orElseThrow(()->new Exception("resourcer 참조 오류"));
-        query.resourcerId(resourcer.id());
+        entity.resourcerId(resourcer.id());
 
-        queryRepository.save(query);
+        queryRepository.save(entity);
 
         return Status.OK;
     }

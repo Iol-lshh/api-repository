@@ -81,35 +81,36 @@ public class ResourcerServiceJpa implements ResourcerService{
 
     @Override
     public Status save(ResourcerDto dto) {
-        ResourcerInfo resourcer;
+        ResourcerInfo entity;
         
         if(dto.id()==null){
-            dto.created(LocalDateTime.now());
-            resourcer = toEntity(dto);
+            entity = new ResourcerInfo();
+            entity.setCreated(LocalDateTime.now());
         }else{
             resourcerManager.deallocateResourcer(dto.id());
-            resourcer = resourcerRepository.findById(dto.id())
+            entity = resourcerRepository.findById(dto.id())
                 .orElseGet(()->{
-                    dto.created(LocalDateTime.now());
-                    return toEntity(dto);
+                    ResourcerInfo _entity = new ResourcerInfo();
+                    _entity.setCreated(LocalDateTime.now());
+                    return _entity;
                 });
         }
 
-        resourcer
-            .name(dto.name()!=null ? dto.name() : resourcer.name())
-            .path(dto.path()!=null ? dto.path() : resourcer.path())
-            .description(dto.description() !=null ? dto.description() : resourcer.description())
-            .accessName(dto.accessName() != null ? dto.accessName():resourcer.accessName())
-            .key(dto.key()!=null?dto.key():resourcer.key())
-            .driver(dto.driver()!=null?dto.driver():resourcer.driver())
-            .driverClassName(dto.driverClassName()!=null?dto.driverClassName():resourcer.driverClassName())
+        entity
+            .name(dto.name()!=null ? dto.name() : entity.name())
+            .path(dto.path()!=null ? dto.path() : entity.path())
+            .description(dto.description() !=null ? dto.description() : entity.description())
+            .accessName(dto.accessName() != null ? dto.accessName():entity.accessName())
+            .key(dto.key()!=null?dto.key():entity.key())
+            .driver(dto.driver()!=null?dto.driver():entity.driver())
+            .driverClassName(dto.driverClassName()!=null?dto.driverClassName():entity.driverClassName())
             .setEnabled(dto.isEnabled());
         
         if(dto.deleted()!=null){
-            resourcer.setDeleted(dto.deleted());
+            entity.setDeleted(dto.deleted());
         }
 
-        resourcerRepository.save(resourcer);
+        resourcerRepository.save(entity);
         return Status.OK;
     }
 }

@@ -64,16 +64,17 @@ public class RouterServiceJpa implements RouterService {
 
     @Override
     public Status save(RouterDto dto) {
-        Router router;
+        Router entity;
         
         if(dto.id() == null){
-            dto.created(LocalDateTime.now());
-            router = toEntity(dto);
+            entity = new Router();
+            entity.setCreated(LocalDateTime.now());
         }else{
-            router = routerRepository.findById(dto.id())
+            entity = routerRepository.findById(dto.id())
                 .orElseGet(()->{
-                    dto.created(LocalDateTime.now());
-                    return toEntity(dto);
+                    Router _entity = new Router();
+                    _entity.setCreated(LocalDateTime.now());
+                    return _entity;
                 });
         }
 
@@ -82,18 +83,18 @@ public class RouterServiceJpa implements RouterService {
             pipelineInfo = pipelineInfoRepository.findById(dto.pipelineId()).orElse(null);
         }
         
-        router
-            .name(dto.name()!=null?dto.name():router.name())
-            .path(dto.path()!=null?dto.path():router.path())
-            .description(dto.description()!=null?dto.description():router.description())
+        entity
+            .name(dto.name()!=null?dto.name():entity.name())
+            .path(dto.path()!=null?dto.path():entity.path())
+            .description(dto.description()!=null?dto.description():entity.description())
             .pipelineId(pipelineInfo.id())
             .setEnabled(dto.isEnabled());
 
         if(dto.deleted()!=null){
-            router.setDeleted(dto.deleted());
+            entity.setDeleted(dto.deleted());
         }
 
-        routerRepository.save(router);
+        routerRepository.save(entity);
         return Status.OK;
     }
 
