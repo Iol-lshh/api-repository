@@ -24,7 +24,7 @@ public class DefaultPipelineContext implements PipelineContext {
 
     public DefaultPipelineContext(QueryService queryService){
         this.queryService = queryService;
-        this.returnList = new ArrayList();
+        this.returnList = new ArrayList<String>();
         this.argumentPool = new HashMap<>();
     }
 

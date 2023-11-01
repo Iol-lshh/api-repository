@@ -59,14 +59,14 @@ public class DefaultPipelineManager implements PipelineManager{
         @Override
         public PipelineContext createContext(int pipelineId, List<QueryArgumentDto<Object>> arguments) throws Exception {
 
-            List<PipelineStep> processList = new ArrayList();
+            List<PipelineStep> processList = new ArrayList<>();
             List<PipelineStepDto> processDtos = pipelineStepService.findList(pipelineId, ProcessType.Process);
             for (PipelineStepDto dto : processDtos) {
                 PipelineStep step = createStep(dto);
                 processList.add(step);
             }
 
-            List<PipelineStep> rollbackList = new ArrayList();
+            List<PipelineStep> rollbackList = new ArrayList<>();
             List<PipelineStepDto> rollbackDtos = pipelineStepService.findList(pipelineId, ProcessType.Rollback);
             for (PipelineStepDto dto : rollbackDtos) {
                 PipelineStep step = createStep(dto);
