@@ -19,6 +19,4 @@ public class PipelineViewDto {
     List<PipelineStepDto> processSteps;
     @JsonProperty
     List<PipelineStepDto> rollbackSteps;
-    @JsonProperty
-    List<PipelineReturnDto> returnList;
 }

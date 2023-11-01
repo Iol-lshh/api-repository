@@ -24,7 +24,7 @@ public class PipelineStepParameterDto {
     String description;
 
     @JsonProperty
-    boolean isWritable; // READ_ONLY, WRITABLE
+    String iotype;
 
     @JsonProperty
     Integer pipelineStepId;

@@ -106,6 +106,21 @@ create table api_pipeline_return(
 );
 create index api_pipeline_return_pipeline_id on api_pipeline_return(pipeline_id);
 
+create table api_pipeline_step_parameter(
+	id bigserial primary key,
+	name varchar(20),
+	description varchar(300),
+	step_id int,
+	alias varchar(20),
+	iotype varchar(10),
+	created TIMESTAMPTZ,
+	deleted TIMESTAMPTZ,
+	is_enabled bool
+);
+create index api_pipeline_step_parameter_pipeline_step_id 
+on api_pipeline_step_parameter(step_id);
+
+
 
 drop table api_router ;
 drop table api_query ;
@@ -115,7 +130,7 @@ drop table api_resource_request;
 drop table api_query_argument;
 drop table api_pipeline_info;
 drop table api_pipeline_step_info;
-drop table api_pipeline_return;
+drop table api_pipeline_step_parameter;
 
 
 select * from api_pipeline_step_info apsi 

@@ -7,13 +7,16 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lshh.apirepository.common.dbhelper.QueryStatement.Parameter.IoType;
 import lshh.apirepository.common.pipeline.PipelineStep.ProcessType;
 import lshh.apirepository.common.pipeline.PipelineStep.ResourcerType;
 import lshh.apirepository.dto.api.PipelineStepDto;
+import lshh.apirepository.dto.api.PipelineStepParameterDto;
 import lshh.apirepository.dto.api.PipelineStepViewDto;
 import lshh.apirepository.dto.api.QueryDto;
 import lshh.apirepository.orm.api.pipeline.PipelineStepInfo;
 import lshh.apirepository.orm.api.pipeline.PipelineStepInfoRepository;
+import lshh.apirepository.orm.api.pipeline.PipelineStepParameterRepository;
 import lshh.apirepository.service.api.query.QueryService;
 
 @Service
@@ -21,6 +24,8 @@ public class PipelineStepServiceJpa implements PipelineStepService {
 
     @Autowired
     PipelineStepInfoRepository pipelineStepInfoRepository;
+    @Autowired
+    PipelineStepParameterService pipelineStepParameterService;
 
     @Autowired
     QueryService queryService;
@@ -110,13 +115,18 @@ public class PipelineStepServiceJpa implements PipelineStepService {
     public PipelineStepViewDto findView(int pipelineStepId) throws Exception {
         
         PipelineStepDto pipelineStepDto = pipelineStepInfoRepository.findById(pipelineStepId).map(this::toDto).orElse(null);
+        List<PipelineStepParameterDto> inputs = pipelineStepParameterService.findList(pipelineStepId, IoType.INPUT.name());
+        List<PipelineStepParameterDto> outputs = pipelineStepParameterService.findList(pipelineStepId, IoType.OUTPUT.name());
+
         QueryDto queryDto = null;
         if(pipelineStepDto != null && pipelineStepDto.queryId() != null){
             queryDto = queryService.find(pipelineStepDto.queryId()).orElse(null);
         }
         return new PipelineStepViewDto()
             .pipelineStep(pipelineStepDto)
-            .query(queryDto);
+            .query(queryDto)
+            .inputs(inputs)
+            .outputs(outputs);
     }
     
 }

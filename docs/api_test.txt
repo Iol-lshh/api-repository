@@ -64,12 +64,14 @@
   "enabled": true
 }
 ```
-## pipeline_return
+## pipeline_step_parameter
 ```json
 {
-  "name": "name",
-  "description": "for test",
-  "pipline_id": 1,
+  "name": "test",
+  "alias": "",
+  "description": "test not able",
+  "iotype": "INPUT",
+  "pipeline_step_id": 3,
   "is_enabled": true
 }
 ```

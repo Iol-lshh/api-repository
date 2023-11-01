@@ -52,5 +52,4 @@ public class PipelineStepController {
     public PipelineStepViewDto findView(@PathVariable int pipelineStepId) throws Exception{
         return pipelineStepService.findView(pipelineStepId);
     }
-    
 }

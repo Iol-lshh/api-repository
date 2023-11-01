@@ -12,6 +12,7 @@ import lshh.apirepository.dto.request.QueryMsgDto;
 import lshh.apirepository.service.ServiceTemplate.Status;
 import lshh.apirepository.common.resourcer.ResourcerContext;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,12 +27,12 @@ public class DbPipelineStep implements PipelineStep{
     ProcessType processType;
     
     QueryDto queryDto;
-    List<PipelineStepParameterDto> inputParameters;
-    List<PipelineStepParameterDto> outputParameters;
-    List<QueryArgumentDto<Object>> arguments;
+    List<PipelineStepParameterDto> inputParameters = new ArrayList<>();
+    List<PipelineStepParameterDto> outputParameters = new ArrayList<>();
+    List<QueryArgumentDto<Object>> arguments = new ArrayList<>();
 
     Status status = Status.WAIT;
-    List<Map <String, Object>> result;
+    List<Map <String, Object>> result = new ArrayList<>();
     
     @Override
     public QueryDto query(){

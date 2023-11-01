@@ -22,7 +22,7 @@ public class DefaultPipelineContext implements PipelineContext {
 
     public DefaultPipelineContext(QueryService queryService){
         this.queryService = queryService;
-        this.returnList = new ArrayList<Object>();
+        this.returnList = new ArrayList<>();
         this.argumentPool = new HashMap<>();
     }
 
@@ -71,7 +71,8 @@ public class DefaultPipelineContext implements PipelineContext {
                     throw new PipelineProcessFailException("FAIL: "+ step.query().id());
                 }
             }
-        }catch(Exception e){
+        }catch(Exception err){
+            System.out.println(err);
             return Status.FAIL;
         }
         return Status.OK;

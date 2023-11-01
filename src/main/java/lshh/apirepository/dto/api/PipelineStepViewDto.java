@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import java.util.List;
 
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Accessors(chain = true, fluent = true)
@@ -14,6 +15,12 @@ public class PipelineStepViewDto {
     
     @JsonProperty
     PipelineStepDto pipelineStep;
+
+    @JsonProperty
+    List<PipelineStepParameterDto> inputs;
+    @JsonProperty
+    List<PipelineStepParameterDto> outputs;
+    
 
     @JsonProperty
     QueryDto query;
