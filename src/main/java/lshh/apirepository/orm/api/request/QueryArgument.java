@@ -15,9 +15,9 @@ public class QueryArgument extends RegistedInfo {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     Integer id;
 
-    @Column(name="query_parameter_id")
-    String queryPrameterId;
+    @Column(name="parameter_id")
+    Integer prameterId;
     @Column(name="request_history_id")
-    String requestHistoryId;
+    Integer requestHistoryId;
     String contents;
 }
