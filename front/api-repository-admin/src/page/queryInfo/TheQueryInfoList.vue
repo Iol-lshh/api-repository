@@ -1,4 +1,5 @@
 <template>
+    Query
 </template>
 <script>
 export default{

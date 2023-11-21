@@ -1,4 +1,5 @@
 <template>
+    Resourcer
 </template>
 <script>
 export default{

@@ -27,58 +27,57 @@ const naviList = [
         name: 'resourcer-info',
         path: '/resourcer',
         components: {default: TheResourcerInfoList},
-        children: [
-            {
-                name: 'resourcer-info-view',
-                path: '/view:resourcerInfoId',
-                components: TheResourcerInfoView,
-                props: true
-            },
-            {
-                name: 'resourcer-info-form',
-                path: '/form:resourcerInfoId',
-                components: TheResourcerInfoForm,
-                props: true
-            },
-        ]
+    },
+    {
+        name: 'resourcer-info-view',
+        path: '/resourcer/view:resourcerInfoId',
+        components: TheResourcerInfoView,
+        props: true
+    },
+    {
+        name: 'resourcer-info-form',
+        path: '/resourcer/form:resourcerInfoId',
+        components: TheResourcerInfoForm,
+        props: true
     },
     {
         name: 'query-info',
         path: '/query',
         components: {default: TheQueryInfoList},
         children: [
-            {
-                name: 'query-view',
-                path: '/view:queryInfoId',
-                components: TheQueryInfoView,
-                props: true
-            },
-            {
-                name: 'query-form',
-                path: '/form:queryInfoId',
-                components: TheQueryInfoForm,
-                props: true
-            },
         ]
+    },
+    {
+        name: 'query-view',
+        path: '/query/view:queryInfoId',
+        components: TheQueryInfoView,
+        props: true
+    },
+    {
+        name: 'query-form',
+        path: '/query/form:queryInfoId',
+        components: TheQueryInfoForm,
+        props: true
     },
     {
         name: 'router-info',
         path: '/router',
         components: {default: TheRouterInfoList},
         children: [
-            {
-                name: 'router-view',
-                path: '/view:routerInfoId',
-                components: TheRouterInfoView,
-                props: true
-            },
-            {
-                name: 'router-form',
-                path: '/form:routerInfoId',
-                components: TheRouterInfoForm,
-                props: true
-            },
+            
         ]
+    },
+    {
+        name: 'router-view',
+        path: '/router/view:routerInfoId',
+        components: TheRouterInfoView,
+        props: true
+    },
+    {
+        name: 'router-form',
+        path: '/router/form:routerInfoId',
+        components: TheRouterInfoForm,
+        props: true
     },
     { path: '/:notFound(.*)', component: NotFound }
 ]
