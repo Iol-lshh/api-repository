@@ -13,7 +13,7 @@
                 </tr>
                 <tr v-for="(routerInfo, index) in routerList" key="routerInfo.id">
                     <td>{{ index }}</td>
-                    <td>{{ routerInfo.name }}</td>
+                    <td><router-link :to="'/router/view/'+ routerInfo.id">{{ routerInfo.name }}</router-link></td>
                     <td>{{ routerInfo.path }}</td>
                     <td>{{ routerInfo.description }}</td>
                     <td>{{ routerInfo.enabled }}</td>
@@ -24,14 +24,16 @@
 </template>
 <script>
 import axios from 'axios';
+import requestRouteInfo from '../../assets/requestRouteInfo';
 export default{
     data(){
         return {
-            routerList:[],
+            routerList: [],
         };
     },
     mounted(){
-        this.initRouterList();
+        //this.initRouterList();
+        this.routerList = this.getTestData();
     },
     computed:{
     },
@@ -39,7 +41,19 @@ export default{
     },
     methods: {
         initRouterList: async () => {
-            this.routerList = await axios.get('http://localhost:8080/api-repository/router/list/all');
+            this.routerList = await axios.get(requestRouteInfo.RouterList.path);
+        },
+        getTestData: () => {
+            return [
+                {
+                    "id": 1,
+                    "name": "string",
+                    "path": "string",
+                    "description": "string",
+                    "query_id": 1,
+                    "enabled": true
+                },
+            ]
         }
     },
 }

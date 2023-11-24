@@ -17,76 +17,80 @@ import NotFound from './page/NotFound.vue';
 // const naviList = routerHelper.toTree(preMenuList);
 
 const naviList = [
-    { path: '/', redirect: '/resourcer/cached' },
+    { 
+        path: '/', 
+        redirect: '/resourcer/cached' 
+    },
     {
         name: 'cached-resourcer-info',
         path: '/resourcer/cached',
-        components: {default: TheCachedResourcerInfoList}
+        components: { default: TheCachedResourcerInfoList }
     },
     {
         name: 'resourcer-info',
         path: '/resourcer',
-        components: {default: TheResourcerInfoList},
+        components: { default: TheResourcerInfoList },
     },
     {
         name: 'resourcer-info-view',
         path: '/resourcer/view:resourcerInfoId',
-        components: TheResourcerInfoView,
+        components: { default: TheResourcerInfoView },
         props: true
     },
     {
         name: 'resourcer-info-form',
         path: '/resourcer/form:resourcerInfoId',
-        components: TheResourcerInfoForm,
+        components: { default: TheResourcerInfoForm },
         props: true
     },
     {
         name: 'query-info',
         path: '/query',
-        components: {default: TheQueryInfoList},
+        components: { default: TheQueryInfoList },
         children: [
         ]
     },
     {
         name: 'query-view',
         path: '/query/view:queryInfoId',
-        components: TheQueryInfoView,
+        components: { default: TheQueryInfoView },
         props: true
     },
     {
         name: 'query-form',
         path: '/query/form:queryInfoId',
-        components: TheQueryInfoForm,
+        components: { default: TheQueryInfoForm },
         props: true
     },
     {
         name: 'router-info',
         path: '/router',
-        components: {default: TheRouterInfoList},
+        components: { default: TheRouterInfoList },
         children: [
             
         ]
     },
     {
         name: 'router-view',
-        path: '/router/view:routerInfoId',
-        components: TheRouterInfoView,
+        path: '/router/view/:routerInfoId',
+        components: { default: TheRouterInfoView },
         props: true
     },
     {
         name: 'router-form',
-        path: '/router/form:routerInfoId',
-        components: TheRouterInfoForm,
+        path: '/router/form/:routerInfoId',
+        components: { default: TheRouterInfoForm },
         props: true
     },
-    { path: '/:notFound(.*)', component: NotFound }
+    {   
+        path: '/:notFound(.*)', 
+        component: { default: NotFound }
+    }
 ]
 
 const router = createRouter({
     history: createWebHistory(), 
-    routes: [
-        ...naviList
-    ]
+    routes: [ ...naviList ],
 });
 
 export default router;
