@@ -1,5 +1,6 @@
 # api-repository
 api를 재귀적으로 등록 및 제공하는 마이크로 서비스
+![uml](../img/uml.png)
 
 # Entity
 ## api
